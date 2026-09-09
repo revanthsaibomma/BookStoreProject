@@ -1,0 +1,83 @@
+[
+  {
+    "BookId": 1,
+    "bookName": "The Alchemist",
+    "authorName": "Paulo Coelho",
+    "price": 15.99,
+    "image": "the-alchemist.jpg",
+    "genreId": 1,
+    "description": "A philosophical novel about a shepherd named Santiago who follows his dream in search of treasure and discovers his life's purpose."
+  },
+  {
+    "BookId": 2,
+    "bookName": "Clean Code",
+    "authorName": "Robert C. Martin",
+    "price": 39.99,
+    "image": "clean-code.jpg",
+    "genreId": 2,
+    "description": "A classic guide to writing clean, maintainable, and professional-quality code with practical examples and best practices."
+  },
+  {
+    "BookId": 3,
+    "bookName": "Atomic Habits",
+    "authorName": "James Clear",
+    "price": 24.99,
+    "image": "atomic-habits.jpg",
+    "genreId": 3,
+    "description": "A practical framework for building good habits, breaking bad ones, and achieving remarkable long-term results."
+  },
+  {
+    "BookId": 4,
+    "bookName": "Harry Potter and the Sorcerer's Stone",
+    "authorName": "J.K. Rowling",
+    "price": 19.99,
+    "image": "harry-potter-1.jpg",
+    "genreId": 1,
+    "description": "The first adventure of Harry Potter as he discovers he is a wizard and begins his journey at Hogwarts School of Witchcraft and Wizardry."
+  },
+  {
+    "BookId": 5,
+    "bookName": "The Pragmatic Programmer",
+    "authorName": "Andrew Hunt & David Thomas",
+    "price": 42.99,
+    "image": "pragmatic-programmer.jpg",
+    "genreId": 2,
+    "description": "An essential programming book covering practical techniques, career advice, and software craftsmanship."
+  },
+  {
+    "BookId": 6,
+    "bookName": "Deep Work",
+    "authorName": "Cal Newport",
+    "price": 21.99,
+    "image": "deep-work.jpg",
+    "genreId": 3,
+    "description": "Explains how focused, distraction-free work leads to greater productivity and success in today's digital world."
+  },
+  {
+    "BookId": 7,
+    "bookName": "The Hobbit",
+    "authorName": "J.R.R. Tolkien",
+    "price": 18.50,
+    "image": "the-hobbit.jpg",
+    "genreId": 1,
+    "description": "Bilbo Baggins embarks on an unexpected journey filled with dragons, treasure, and unforgettable adventures."
+  },
+  {
+    "BookId": 8,
+    "bookName": "Design Patterns",
+    "authorName": "Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides",
+    "price": 49.99,
+    "image": "design-patterns.jpg",
+    "genreId": 2,
+    "description": "The famous Gang of Four book introducing reusable object-oriented design patterns for building robust software."
+  },
+  {
+    "BookId": 9,
+    "bookName": "Think Like a Monk",
+    "authorName": "Jay Shetty",
+    "price": 17.99,
+    "image": "think-like-a-monk.jpg",
+    "genreId": 3,
+    "description": "Shares timeless wisdom and practical exercises inspired by monk life to reduce stress and find purpose."
+  }
+]

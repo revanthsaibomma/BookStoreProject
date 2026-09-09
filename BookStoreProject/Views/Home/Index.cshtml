@@ -1,0 +1,419 @@
+﻿@model IEnumerable<BookStoreProject.DTOs.BookDisplayDto>
+
+@{
+    ViewData["Title"] = "BookNest - Online Bookstore";
+
+    var genres =
+        ViewBag.Genres as IEnumerable<BookStoreProject.Models.Genre>;
+
+}
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<section class="hero-section">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <!-- LEFT -->
+            <div class="col-lg-7">
+
+                <div class="hero-badge">
+
+                    <i class="bi bi-stars"></i>
+
+                    Discover your next favorite book
+
+                </div>
+
+
+                <h1>
+
+                    Stories worth
+                    <br />
+
+                    reading.
+                    <span>Books</span>
+
+                    <br />
+
+                    <span>worth owning.</span>
+
+                </h1>
+
+
+                <p>
+
+                    Explore our collection of books across
+                    fiction, technology, science, self-help
+                    and more. Find your next great read today.
+
+                </p>
+
+
+                <div class="hero-buttons">
+
+                    <a href="#books"
+                       class="hero-btn hero-btn-primary">
+
+                        <i class="bi bi-search"></i>
+
+                        Explore Books
+
+                    </a>
+
+
+                    @if (User.Identity?.IsAuthenticated != true)
+                    {
+                        <a asp-area="Identity"
+                           asp-page="/Account/Register"
+                           class="hero-btn hero-btn-outline">
+
+                            <i class="bi bi-person-plus"></i>
+
+                            Join BookNest
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT - BOOKS -->
+            <div class="col-lg-5">
+
+                <div class="hero-books">
+
+                    <div class="hero-glow"></div>
+
+
+                    <!-- BACK BOOK -->
+                    <div class="hero-book hero-book-back">
+
+                        <img src="/images/books/clean-code.jpg"
+                             alt="Clean Code" />
+
+                    </div>
+
+
+                    <!-- MIDDLE BOOK -->
+                    <div class="hero-book hero-book-middle">
+
+                        <img src="/images/books/atomic-habits.jpg"
+                             alt="Atomic Habits" />
+
+                    </div>
+
+
+                    <!-- FRONT BOOK -->
+                    <div class="hero-book hero-book-front">
+
+                        <img src="/images/books/the-alchemist.jpg"
+                             alt="The Alchemist" />
+
+                    </div>
+
+
+                    <!-- BOOK COUNT -->
+                    <div class="hero-floating-card">
+
+                        <i class="bi bi-book-half"></i>
+
+                        <div>
+
+                            <strong>20+</strong>
+
+                            <small>
+                                Books to explore
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     BOOK COLLECTION
+     ========================================================= -->
+
+<section id="books" class="books-section">
+
+    <div class="container">
+
+
+        <!-- SECTION HEADING -->
+
+        <div class="collection-heading">
+
+            <span class="eyebrow">
+                OUR COLLECTION
+            </span>
+
+            <h2>
+                Explore Books
+            </h2>
+
+            <p>
+                Find something you'll love reading.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+         SEARCH
+         ================================================= -->
+
+        <div class="search-box">
+
+            <i class="bi bi-search search-icon"></i>
+
+            <input type="text"
+                   id="bookSearch"
+                   class="search-input"
+                   placeholder="Search books, authors or genres..."
+                   autocomplete="off" />
+
+            <button type="button"
+                    id="searchButton"
+                    class="search-button">
+                <i class="bi bi-search"></i>
+                Search
+            </button>
+
+        </div>
+
+
+
+        <!-- =================================================
+         GENRE FILTERS
+         ================================================= -->
+        @if (genres != null && genres.Any())
+        {
+            <div class="genre-filter-container">
+
+                <!-- ALL -->
+                <button type="button"
+                        class="genre-btn active"
+                        data-genre="all">
+
+                    All Books
+
+                </button>
+
+
+                <!-- DATABASE GENRES -->
+                @foreach (var genre in genres)
+                {
+                    <button type="button"
+                            class="genre-btn"
+                            data-genre="@genre.GenreName">
+
+                        @genre.GenreName
+
+                    </button>
+                }
+
+            </div>
+        }
+
+
+
+        <!-- =================================================
+         BOOKS
+         ================================================= -->
+        @if (Model != null && Model.Any())
+        {
+
+            <div id="noBooksMessage" class="no-books-message" style="display:none;">
+                <i class="bi bi-search"></i>
+                <h3>No books found</h3>
+                <p>Try searching with a different book name, author or genre.</p>
+            </div>
+
+
+            <div class="row g-4 books-grid" id="booksGrid">
+
+
+                @foreach (var book in Model)
+                {
+                    <div class="col-sm-6 col-lg-4 col-xl-3 book-item"
+                         data-genre="@book.GenreName">
+
+
+                        <div class="book-card"
+                             data-book-name="@book.BookName"
+                             data-author="@book.AuthorName"
+                             data-genre="@book.GenreName">
+
+
+                            <!-- IMAGE -->
+
+                            <div class="book-image-container">
+
+                                @if (!string.IsNullOrWhiteSpace(book.Image))
+                                {
+                                    <img src="@book.Image"
+                                         class="book-image"
+                                         alt="@book.BookName"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                                    <div class="book-placeholder"
+                                         style="display:none;">
+
+                                        <i class="bi bi-book"></i>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="book-placeholder">
+
+                                        <i class="bi bi-book"></i>
+
+                                    </div>
+                                }
+
+                            </div>
+
+
+
+                            <!-- INFORMATION -->
+
+                            <div class="card-body d-flex flex-column">
+
+
+                                <!-- GENRE -->
+
+                                <span class="book-genre">
+
+                                    @book.GenreName
+
+                                </span>
+
+
+                                <!-- NAME -->
+
+                                <h5>
+
+                                    @book.BookName
+
+                                </h5>
+
+
+                                <!-- AUTHOR -->
+
+                                <p class="book-author">
+
+                                    by @book.AuthorName
+
+                                </p>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <p class="book-description flex-grow-1">
+
+                                    @(book.Description?.Length > 100
+                                        ? book.Description.Substring(0, 100) + "..."
+                                        : book.Description)
+
+                                </p>
+
+
+
+                                <!-- PRICE + DETAIL -->
+
+                                <div class="book-bottom">
+
+                                    <span class="book-price">
+
+                                        ₹@book.Price.ToString("0.00")
+
+                                    </span>
+
+
+                                    <a asp-controller="Home"
+                                       asp-action="Detail"
+                                       asp-route-id="@book.BookId"
+                                       class="view-details-btn">
+
+                                        View Details
+
+                                        <i class="bi bi-arrow-right"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- FILTER EMPTY MESSAGE -->
+
+            <div id="filterEmpty"
+                 class="empty-books"
+                 style="display:none;">
+
+                <div class="empty-icon">
+
+                    <i class="bi bi-search"></i>
+
+                </div>
+
+                <h3>
+                    No books found
+                </h3>
+
+                <p>
+                    There are no books in this category yet.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="empty-books">
+
+                <div class="empty-icon">
+
+                    <i class="bi bi-book"></i>
+
+                </div>
+
+                <h3>
+                    No books available
+                </h3>
+
+                <p>
+                    Check back later for new books.
+                </p>
+
+            </div>
+        }
+
+    </div>

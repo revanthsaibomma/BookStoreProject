@@ -1,0 +1,28 @@
+﻿
+using BookStoreProject.Models;
+
+namespace BookStoreProject.ViewModels
+{
+    public class BookDisplayVM
+    {
+        public int BookId { get; set; }
+
+        public string? BookName { get; set; }
+
+        public string? AuthorName { get; set; }
+
+        public double Price { get; set; }
+
+        public string? Image { get; set; }
+
+        public int GenreId { get; set; }
+
+        public Genre Genre { get; set; }
+
+        public string? Description { get; set; }
+
+        public int Stock { get; set; }
+
+        public int Quantity { get; set; }
+    }
+}

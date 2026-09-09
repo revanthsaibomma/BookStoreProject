@@ -1,0 +1,172 @@
+@* @page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+                <label asp-for="Username" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
+                <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@
+
+
+@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="profile-page">
+
+    <div class="profile-container">
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-icon">
+                <i class="bi bi-person"></i>
+            </div>
+
+            <div>
+                <span class="profile-label">ACCOUNT</span>
+                <h1>My Profile</h1>
+                <p>Manage your personal information and account details.</p>
+            </div>
+        </div>
+
+        <!-- Status Message -->
+        <partial name="_StatusMessage" for="StatusMessage" />
+
+        <!-- Profile Card -->
+        <div class="profile-card">
+
+            <div class="profile-card-header">
+                <div>
+                    <h2>Personal Information</h2>
+                    <p>Keep your account information up to date.</p>
+                </div>
+
+                <div class="profile-card-icon">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+            </div>
+
+            <form id="profile-form" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="profile-validation"
+                     role="alert">
+                </div>
+
+                <!-- Username -->
+                <div class="profile-field">
+
+                    <label asp-for="Username">
+                        <i class="bi bi-person"></i>
+                        Username
+                    </label>
+
+                    <div class="profile-input-wrapper">
+
+                        <input asp-for="Username"
+                               class="profile-input"
+                               disabled />
+
+                        <i class="bi bi-lock-fill profile-input-icon"></i>
+
+                    </div>
+
+                    <small>
+                        Your username cannot be changed here.
+                    </small>
+
+                </div>
+
+                <!-- Phone Number -->
+                <div class="profile-field">
+
+                    <label asp-for="Input.PhoneNumber">
+                        <i class="bi bi-telephone"></i>
+                        Phone Number
+                    </label>
+
+                    <div class="profile-input-wrapper">
+
+                        <input asp-for="Input.PhoneNumber"
+                               class="profile-input"
+                               placeholder="Enter your phone number"
+                               autocomplete="tel" />
+
+                        <i class="bi bi-telephone profile-input-icon"></i>
+
+                    </div>
+
+                    <span asp-validation-for="Input.PhoneNumber"
+                          class="profile-error">
+                    </span>
+
+                </div>
+
+                <!-- Save Button -->
+                <button id="update-profile-button"
+                        type="submit"
+                        class="profile-save-btn">
+
+                    <i class="bi bi-check2-circle"></i>
+                    Save Changes
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Account Security -->
+        <div class="profile-security">
+
+            <div class="security-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h3>Account Security</h3>
+                <p>
+                    Keep your account secure by using a strong password
+                    and keeping your information up to date.
+                </p>
+            </div>
+
+            <a asp-page="./ChangePassword" class="security-btn">
+                Change Password
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

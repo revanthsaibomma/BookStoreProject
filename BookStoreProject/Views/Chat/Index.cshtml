@@ -1,0 +1,1043 @@
+﻿@* @{
+    ViewData["Title"] = "AI Book Assistant";
+}
+
+<div class="ai-page">
+
+    <!-- Background decoration -->
+    <div class="ai-background-glow glow-one"></div>
+    <div class="ai-background-glow glow-two"></div>
+
+    <!-- Robot background -->
+    <div class="ai-robot-background">
+
+        <img src="~/images/ai-robot.jpg"
+             alt="BookNest AI Robot"
+             class="ai-robot-image" />
+
+        <div class="robot-overlay"></div>
+
+    </div>
+
+    <div class="ai-container">
+
+        <!-- Header -->
+        <div class="ai-header">
+
+            <div class="ai-logo">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <div class="ai-status">
+                <span class="status-dot"></span>
+                AI BOOK ASSISTANT
+            </div>
+
+            <h1>
+                Your Personal
+                <span>Book Assistant</span>
+            </h1>
+
+            <p>
+                Tell me what you're in the mood to read,
+                and I'll help you discover your next favourite book.
+            </p>
+
+        </div>
+
+
+        <!-- Main Chat Card -->
+        <div class="ai-chat-card">
+
+            <!-- Chat Header -->
+            <div class="ai-chat-header">
+
+                <div class="ai-bot-profile">
+
+                    <div class="ai-bot-avatar">
+                        🤖
+                    </div>
+
+                    <div>
+                        <h3>BookNest AI</h3>
+
+                        <div class="ai-online">
+                            <span></span>
+                            Online & ready to help
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="ai-header-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+
+            </div>
+
+
+            <!-- Chat Content -->
+            <div class="ai-chat-content">
+
+                <div class="ai-welcome">
+
+                    <div class="ai-welcome-icon">
+                        <i class="bi bi-chat-heart"></i>
+                    </div>
+
+                    <h2>
+                        What are you in the mood to read?
+                    </h2>
+
+                    <p>
+                        I can help you find books based on your
+                        mood, interests or reading goals.
+                    </p>
+
+                </div>
+
+
+                <!-- Suggestions -->
+                <div class="ai-suggestions">
+
+                    <button type="button"
+                            class="ai-suggestion"
+                            onclick="setMood('I want something motivational')">
+                        <i class="bi bi-lightning-charge"></i>
+                        Motivational
+                    </button>
+
+                    <button type="button"
+                            class="ai-suggestion"
+                            onclick="setMood('I want a mystery book')">
+                        <i class="bi bi-search"></i>
+                        Mystery
+                    </button>
+
+                    <button type="button"
+                            class="ai-suggestion"
+                            onclick="setMood('I want something relaxing')">
+                        <i class="bi bi-cloud"></i>
+                        Relaxing
+                    </button>
+
+                    <button type="button"
+                            class="ai-suggestion"
+                            onclick="setMood('I want a fiction book')">
+                        <i class="bi bi-book"></i>
+                        Fiction
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Input Area -->
+
+            <div class="ai-input-section">
+
+                <div class="ai-input-form">
+
+                    <input type="text"
+                           id="moodInput"
+                           class="ai-input"
+                           placeholder="Tell me your reading mood..."
+                           autocomplete="off" />
+
+                    <button type="button"
+                            id="sendBtn"
+                            class="ai-send-button"
+                            title="Ask AI">
+
+                        <i class="bi bi-send-fill"></i>
+
+                    </button>
+
+                </div>
+
+                <div class="ai-input-hint">
+                    <i class="bi bi-stars"></i>
+                    Try describing a mood, genre or type of story.
+                </div>
+
+                <div id="aiLoading" class="ai-loading">
+                    <i class="bi bi-stars"></i>
+                    BookNest AI is thinking...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Bottom features -->
+
+        <div class="ai-features">
+
+            <div class="ai-feature">
+                <div class="feature-icon">
+                    <i class="bi bi-magic"></i>
+                </div>
+
+                <div>
+                    <strong>Smart Recommendations</strong>
+                    <span>Personalised book suggestions</span>
+                </div>
+            </div>
+
+
+            <div class="ai-feature">
+                <div class="feature-icon">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+
+                <div>
+                    <strong>Natural Conversation</strong>
+                    <span>Tell the AI what you're looking for</span>
+                </div>
+            </div>
+
+
+            <div class="ai-feature">
+                <div class="feature-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+
+                <div>
+                    <strong>Discover Books</strong>
+                    <span>Find something worth reading</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const moodInput = document.getElementById("moodInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const chatContent = document.querySelector(".ai-chat-content");
+    const loading = document.getElementById("aiLoading");
+
+
+    function setMood(text) {
+
+        if (!moodInput)
+            return;
+
+        moodInput.value = text;
+
+        moodInput.focus();
+    }
+
+
+    function addUserMessage(text) {
+
+        const message = document.createElement("div");
+
+        message.className = "ai-message ai-user-message";
+
+        message.innerHTML = `
+                <div class="ai-message-bubble">
+                    ${escapeHtml(text)}
+                </div>
+            `;
+
+        chatContent.appendChild(message);
+
+        scrollToBottom();
+    }
+
+
+    function addAIMessage(text) {
+
+        const message = document.createElement("div");
+
+        message.className = "ai-message ai-bot-message";
+
+        message.innerHTML = `
+                <div class="ai-bot-small-avatar">
+                    🤖
+                </div>
+
+                <div class="ai-message-bubble">
+                    ${escapeHtml(text)}
+                </div>
+            `;
+
+        chatContent.appendChild(message);
+
+        scrollToBottom();
+    }
+
+
+    function addRecommendations(books) {
+
+        if (!books || books.length === 0)
+            return;
+
+
+        const section = document.createElement("div");
+
+        section.className = "ai-recommendations";
+
+
+        books.forEach(book => {
+
+            const card = document.createElement("div");
+
+            card.className = "ai-recommendation-card";
+
+
+            const imageHtml = book.image
+                ? `<img src="${book.image}" alt="${escapeHtml(book.name)}">`
+                : `<div class="ai-book-placeholder">
+                            <i class="bi bi-book"></i>
+                       </div>`;
+
+
+            card.innerHTML = `
+
+                    <div class="ai-book-image">
+                        ${imageHtml}
+                    </div>
+
+                    <div class="ai-book-info">
+
+                        <span class="ai-book-genre">
+                            ${escapeHtml(book.genre ?? "Book")}
+                        </span>
+
+                        <h4>
+                            ${escapeHtml(book.name ?? "Unknown Book")}
+                        </h4>
+
+                        <p class="ai-book-author">
+                            ${escapeHtml(book.author ?? "")}
+                        </p>
+
+                        <p class="ai-book-description">
+                            ${escapeHtml(book.description ?? "")}
+                        </p>
+
+                        <div class="ai-book-bottom">
+
+                            <strong>
+                                ₹${book.price ?? ""}
+                            </strong>
+
+                            <a href="/Home/Detail/${book.id}"
+                               class="ai-view-book">
+                                View Book
+                            </a>
+
+                        </div>
+
+                    </div>
+                `;
+
+            section.appendChild(card);
+
+        });
+
+
+        chatContent.appendChild(section);
+
+        scrollToBottom();
+    }
+
+
+    async function askAssistant() {
+
+        const mood = moodInput.value.trim();
+
+
+        if (!mood) {
+
+            moodInput.focus();
+
+            return;
+        }
+
+
+        addUserMessage(mood);
+
+
+        moodInput.value = "";
+
+
+        loading.style.display = "block";
+
+        sendBtn.disabled = true;
+
+        sendBtn.style.opacity = "0.6";
+
+
+        try {
+
+            const response = await fetch("/Chat/Ask", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    mood: mood
+                })
+
+            });
+
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message || "Something went wrong."
+                );
+
+            }
+
+
+            if (data.success) {
+
+                addAIMessage(
+                    data.message ||
+                    "Here are some books you might enjoy."
+                );
+
+                addRecommendations(data.books);
+
+            }
+            else {
+
+                addAIMessage(
+                    data.message ||
+                    "I couldn't find any recommendations."
+                );
+
+            }
+
+        }
+        catch (error) {
+
+            console.error("AI Assistant Error:", error);
+
+            addAIMessage(
+                "🤖 Sorry, I couldn't connect to the AI right now. Please try again."
+            );
+
+        }
+        finally {
+
+            loading.style.display = "none";
+
+            sendBtn.disabled = false;
+
+            sendBtn.style.opacity = "1";
+
+            moodInput.focus();
+
+        }
+
+    }
+
+
+    function scrollToBottom() {
+
+        if (chatContent) {
+
+            chatContent.scrollTo({
+                top: chatContent.scrollHeight,
+                behavior: "smooth"
+            });
+
+        }
+
+    }
+
+
+    function escapeHtml(text) {
+
+        const div = document.createElement("div");
+
+        div.textContent = text ?? "";
+
+        return div.innerHTML;
+
+    }
+
+
+    sendBtn.addEventListener(
+        "click",
+        askAssistant
+    );
+
+
+    moodInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                askAssistant();
+
+            }
+
+        }
+    );
+
+</script> *@
+
+@{
+    ViewData["Title"] = "AI Book Assistant";
+}
+
+<div class="ai-page">
+
+    <!-- Background -->
+    <div class="ai-background-glow glow-one"></div>
+    <div class="ai-background-glow glow-two"></div>
+
+    <div class="ai-robot-background">
+        <img src="~/images/ai-robot.jpg"
+             alt="BookNest AI"
+             class="ai-robot-image" />
+        <div class="robot-overlay"></div>
+    </div>
+
+    <div class="ai-container">
+
+        <!-- HEADER -->
+        <div class="ai-header">
+
+            <div class="ai-logo">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <div class="ai-status">
+                <span class="status-dot"></span>
+                AI BOOK ASSISTANT
+            </div>
+
+            <h1>
+                Your Personal
+                <span>Book Assistant</span>
+            </h1>
+
+            <p>
+                Tell me what you're in the mood to read,
+                and I'll help you discover your next favourite book.
+            </p>
+
+        </div>
+
+
+        <!-- CHAT CARD -->
+        <div class="ai-chat-card">
+
+            <!-- CHAT HEADER -->
+            <div class="ai-chat-header">
+
+                <div class="ai-bot-profile">
+
+                    <div class="ai-bot-avatar">
+                        🤖
+                    </div>
+
+                    <div>
+                        <h3>BookNest AI</h3>
+
+                        <div class="ai-online">
+                            <span></span>
+                            Online & ready to help
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="ai-header-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+
+            </div>
+
+
+            <!-- CHAT CONTENT -->
+            <div id="chatContent" class="ai-chat-content">
+
+                <div id="welcomeMessage" class="ai-welcome">
+
+                    <div class="ai-welcome-icon">
+                        <i class="bi bi-chat-heart"></i>
+                    </div>
+
+                    <h2>
+                        What are you in the mood to read?
+                    </h2>
+
+                    <p>
+                        I can help you find books based on your
+                        mood, interests or reading goals.
+                    </p>
+
+                </div>
+
+
+                <!-- SUGGESTIONS -->
+                <div id="suggestions" class="ai-suggestions">
+
+                    <button type="button"
+                            class="ai-suggestion"
+                            onclick="setMood('I want something motivational')">
+                        <i class="bi bi-lightning-charge"></i>
+                        Motivational
+                    </button>
+
+                    <button type="button"
+                            class="ai-suggestion"
+                            onclick="setMood('I want a mystery book')">
+                        <i class="bi bi-search"></i>
+                        Mystery
+                    </button>
+
+                    <button type="button"
+                            class="ai-suggestion"
+                            onclick="setMood('I want something relaxing')">
+                        <i class="bi bi-cloud"></i>
+                        Relaxing
+                    </button>
+
+                    <button type="button"
+                            class="ai-suggestion"
+                            onclick="setMood('I want a fiction book')">
+                        <i class="bi bi-book"></i>
+                        Fiction
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="ai-thinking">
+                <span class="ai-thinking-icon">🤖</span>
+
+                <div>
+                    <strong>BookNest AI</strong>
+                    <div class="thinking-dots">
+                        Thinking<span>.</span><span>.</span><span>.</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- INPUT -->
+            <div class="ai-input-section">
+
+                <div class="ai-input-form">
+
+                    <input type="text"
+                           id="moodInput"
+                           class="ai-input"
+                           placeholder="Tell me your reading mood..."
+                           autocomplete="off" />
+
+                    <button type="button"
+                            id="sendBtn"
+                            class="ai-send-button"
+                            title="Ask AI">
+
+                        <i class="bi bi-send-fill"></i>
+
+                    </button>
+
+                </div>
+
+                <div class="ai-input-hint">
+                    <i class="bi bi-stars"></i>
+                    Try describing a mood, genre or type of story.
+                </div>
+
+                <div id="aiLoading" class="ai-loading">
+                    <span class="ai-loading-dot"></span>
+                    BookNest AI is thinking...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FEATURES -->
+        <div class="ai-features">
+
+            <div class="ai-feature">
+
+                <div class="feature-icon">
+                    <i class="bi bi-magic"></i>
+                </div>
+
+                <div>
+                    <strong>Smart Recommendations</strong>
+                    <span>Personalised book suggestions</span>
+                </div>
+
+            </div>
+
+
+            <div class="ai-feature">
+
+                <div class="feature-icon">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+
+                <div>
+                    <strong>Natural Conversation</strong>
+                    <span>Tell the AI what you're looking for</span>
+                </div>
+
+            </div>
+
+
+            <div class="ai-feature">
+
+                <div class="feature-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+
+                <div>
+                    <strong>Discover Books</strong>
+                    <span>Find something worth reading</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const moodInput = document.getElementById("moodInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const chatContent = document.getElementById("chatContent");
+    const loading = document.getElementById("aiLoading");
+    const welcomeMessage = document.getElementById("welcomeMessage");
+    const suggestions = document.getElementById("suggestions");
+
+    const askUrl = '@Url.Action("Ask", "Chat")';
+
+
+    function setMood(text) {
+
+        if (!moodInput)
+            return;
+
+        moodInput.value = text;
+        moodInput.focus();
+    }
+
+
+    function escapeHtml(text) {
+
+        const div = document.createElement("div");
+
+        div.textContent = text ?? "";
+
+        return div.innerHTML;
+    }
+
+
+    function addUserMessage(text) {
+
+        const row = document.createElement("div");
+
+        row.className = "ai-message ai-user-message";
+
+        row.innerHTML = `
+                <div class="ai-message-bubble">
+                    ${escapeHtml(text)}
+                </div>
+            `;
+
+        chatContent.appendChild(row);
+
+        scrollToBottom();
+    }
+
+
+    function addAIMessage(text) {
+
+        const row = document.createElement("div");
+
+        row.className = "ai-message ai-bot-message";
+
+        row.innerHTML = `
+                <div class="ai-bot-small-avatar">
+                    🤖
+                </div>
+
+                <div class="ai-message-bubble">
+                    ${escapeHtml(text)}
+                </div>
+            `;
+
+        chatContent.appendChild(row);
+
+        scrollToBottom();
+    }
+
+
+    function addRecommendations(books) {
+
+        if (!books || books.length === 0)
+            return;
+
+
+        const section = document.createElement("div");
+
+        section.className = "ai-recommendations";
+
+
+        books.forEach(book => {
+
+            const card = document.createElement("div");
+
+            card.className = "ai-recommendation-card";
+
+
+            let imageHtml = "";
+
+            if (book.image) {
+
+                imageHtml = `
+                        <img src="${escapeHtml(book.image)}"
+                             alt="${escapeHtml(book.name)}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                        <div class="ai-book-placeholder"
+                             style="display:none;">
+                            <i class="bi bi-book"></i>
+                        </div>
+                    `;
+
+            }
+            else {
+
+                imageHtml = `
+                        <div class="ai-book-placeholder">
+                            <i class="bi bi-book"></i>
+                        </div>
+                    `;
+            }
+
+
+            card.innerHTML = `
+
+                    <div class="ai-book-image">
+                        ${imageHtml}
+                    </div>
+
+                    <div class="ai-book-info">
+
+                        <span class="ai-book-genre">
+                            ${escapeHtml(book.genre ?? "Book")}
+                        </span>
+
+                        <h4>
+                            ${escapeHtml(book.name ?? "Unknown Book")}
+                        </h4>
+
+                        <p class="ai-book-author">
+                            ${escapeHtml(book.author ?? "")}
+                        </p>
+
+                        <p class="ai-book-description">
+                            ${escapeHtml(book.description ?? "")}
+                        </p>
+
+                        <div class="ai-book-bottom">
+
+                            <strong>
+                                ₹${book.price ?? ""}
+                            </strong>
+
+                            <a href="/Home/Detail/${book.id}"
+                               class="ai-view-book">
+                                View Book
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+                `;
+
+
+            section.appendChild(card);
+
+        });
+
+
+        chatContent.appendChild(section);
+
+        scrollToBottom();
+    }
+
+
+    async function askAssistant() {
+
+        const mood = moodInput.value.trim();
+
+
+        if (!mood) {
+
+            moodInput.focus();
+
+            return;
+        }
+
+
+        // Remove welcome content after first question
+        if (welcomeMessage) {
+            welcomeMessage.style.display = "none";
+        }
+
+        if (suggestions) {
+            suggestions.style.display = "none";
+        }
+
+
+        addUserMessage(mood);
+
+
+        moodInput.value = "";
+
+        sendBtn.disabled = true;
+
+        loading.classList.add("show");
+
+
+        try {
+
+            const response = await fetch(askUrl, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    mood: mood
+                })
+
+            });
+
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message || "Unable to contact AI."
+                );
+
+            }
+
+
+            if (data.success) {
+
+                addAIMessage(
+                    data.message ||
+                    "Here are some books you might enjoy."
+                );
+
+                addRecommendations(data.books);
+
+            }
+            else {
+
+                addAIMessage(
+                    data.message ||
+                    "I couldn't find any recommendations."
+                );
+
+            }
+
+        }
+        catch (error) {
+
+            console.error("BookNest AI Error:", error);
+
+            addAIMessage(
+                "🤖 Sorry, I couldn't connect to the AI right now. Please try again."
+            );
+
+        }
+        finally {
+
+            loading.classList.remove("show");
+
+            sendBtn.disabled = false;
+
+            moodInput.focus();
+
+        }
+
+    }
+
+
+    function scrollToBottom() {
+
+        if (!chatContent)
+            return;
+
+
+        chatContent.scrollTo({
+
+            top: chatContent.scrollHeight,
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+
+    sendBtn.addEventListener(
+        "click",
+        askAssistant
+    );
+
+
+    moodInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                askAssistant();
+
+            }
+
+        }
+    );
+
+</script>

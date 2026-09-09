@@ -1,0 +1,694 @@
+﻿@model BookStoreProject.DTOs.CheckoutDto
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<style>
+    /* =========================================================
+           BOOKNEST - CHECKOUT PAGE
+           ========================================================= */
+
+    .checkout-page {
+        min-height: calc(100vh - 80px);
+        padding: 55px 20px 80px;
+        background: radial-gradient(circle at 10% 10%, rgba(218, 169, 82, 0.07), transparent 28%), radial-gradient(circle at 90% 80%, rgba(218, 169, 82, 0.06), transparent 28%), #0b0d12;
+        color: #ffffff;
+    }
+
+    .checkout-container {
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    /* ---------- PAGE HEADER ---------- */
+
+    .checkout-header {
+        margin-bottom: 35px;
+    }
+
+    .checkout-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #9da7ba;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 18px;
+        transition: 0.2s ease;
+    }
+
+        .checkout-back:hover {
+            color: #dca952;
+        }
+
+    .checkout-header h1 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 38px;
+        font-weight: 700;
+        letter-spacing: -0.8px;
+    }
+
+    .checkout-header p {
+        margin: 10px 0 0;
+        color: #8f99ab;
+        font-size: 15px;
+    }
+
+    /* ---------- MAIN GRID ---------- */
+
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        align-items: start;
+    }
+
+
+    /* ---------- CARDS ---------- */
+
+    .checkout-card {
+        background: #11141b;
+        border: 1px solid rgba(218, 169, 82, 0.18);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .checkout-grid > .checkout-card {
+        margin-top: 0;
+    }
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .card-title-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: rgba(218, 169, 82, 0.11);
+        border: 1px solid rgba(218, 169, 82, 0.22);
+        color: #dca952;
+        font-size: 19px;
+    }
+
+    .card-title h2 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 21px;
+        font-weight: 650;
+    }
+
+    .card-title p {
+        margin: 3px 0 0;
+        color: #737d90;
+        font-size: 13px;
+    }
+
+    /* ---------- FORM ---------- */
+
+    .checkout-form-group {
+        margin-bottom: 20px;
+    }
+
+        .checkout-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e9edf5;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+    .checkout-input {
+        width: 100%;
+        height: 50px;
+        padding: 0 15px;
+        box-sizing: border-box;
+        background: #0c0f15;
+        border: 1px solid #292f3a;
+        border-radius: 10px;
+        color: #ffffff;
+        font-size: 15px;
+        outline: none;
+        transition: 0.2s ease;
+    }
+
+        .checkout-input::placeholder {
+            color: #626c7e;
+        }
+
+        .checkout-input:focus {
+            border-color: #dca952;
+            box-shadow: 0 0 0 3px rgba(220, 169, 82, 0.10);
+        }
+
+    .checkout-textarea {
+        width: 100%;
+        min-height: 105px;
+        padding: 14px 15px;
+        box-sizing: border-box;
+        resize: vertical;
+        background: #0c0f15;
+        border: 1px solid #292f3a;
+        border-radius: 10px;
+        color: #ffffff;
+        font-size: 15px;
+        outline: none;
+        transition: 0.2s ease;
+    }
+
+        .checkout-textarea::placeholder {
+            color: #626c7e;
+        }
+
+        .checkout-textarea:focus {
+            border-color: #dca952;
+            box-shadow: 0 0 0 3px rgba(220, 169, 82, 0.10);
+        }
+
+    /* ---------- VALIDATION ---------- */
+
+    .checkout-error {
+        display: block;
+        margin-top: 6px;
+        color: #ff8585 !important;
+        font-size: 13px;
+    }
+
+    /* ---------- PAYMENT ---------- */
+
+    .payment-options {
+        display: grid;
+        gap: 12px;
+    }
+
+    .payment-option {
+        position: relative;
+    }
+
+        .payment-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+    .payment-label {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px;
+        background: #0c0f15;
+        border: 1px solid #292f3a;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+        .payment-label:hover {
+            border-color: rgba(218, 169, 82, 0.55);
+            transform: translateY(-1px);
+        }
+
+    .payment-option input:checked + .payment-label {
+        border-color: #dca952;
+        background: rgba(218, 169, 82, 0.07);
+        box-shadow: 0 0 0 1px rgba(218, 169, 82, 0.15);
+    }
+
+    .payment-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: #181c24;
+        color: #dca952;
+        font-size: 19px;
+    }
+
+    .payment-text strong {
+        display: block;
+        color: #f2f4f8;
+        font-size: 14px;
+        margin-bottom: 3px;
+    }
+
+    .payment-text span {
+        color: #737d90;
+        font-size: 12px;
+    }
+
+    /* ---------- ORDER SUMMARY ---------- */
+
+    .summary-card {
+        grid-column: 1 / -1;
+        position: static;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 13px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+        .summary-row span:first-child {
+            color: #8f99ab;
+        }
+
+        .summary-row span:last-child {
+            color: #e9edf5;
+            font-weight: 600;
+        }
+
+    .secure-box {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-top: 22px;
+        padding: 15px;
+        border-radius: 12px;
+        background: rgba(218, 169, 82, 0.06);
+        border: 1px solid rgba(218, 169, 82, 0.12);
+    }
+
+        .secure-box i {
+            color: #dca952;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .secure-box strong {
+            display: block;
+            color: #e9edf5;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .secure-box span {
+            color: #737d90;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+    /* ---------- BUTTONS ---------- */
+
+    .checkout-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .place-order-btn {
+        flex: 1;
+        min-height: 52px;
+        border: none;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #dca952, #c89135);
+        color: #111111;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 8px 20px rgba(218, 169, 82, 0.16);
+    }
+
+        .place-order-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #e6b765, #dca952);
+            box-shadow: 0 12px 25px rgba(218, 169, 82, 0.25);
+        }
+
+    .back-cart-btn {
+        min-height: 52px;
+        padding: 0 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid #303642;
+        border-radius: 11px;
+        background: #181c24;
+        color: #d7dce5;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .back-cart-btn:hover {
+            color: #dca952;
+            border-color: #dca952;
+            background: rgba(218, 169, 82, 0.06);
+        }
+
+    /* ---------- RESPONSIVE ---------- */
+
+    @@media (max-width: 900px) {
+        .checkout-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .summary-card {
+            grid-column: auto;
+            position: static;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .checkout-page {
+            padding: 35px 15px 60px;
+        }
+
+        .checkout-header h1 {
+            font-size: 30px;
+        }
+
+        .checkout-card {
+            padding: 23px 18px;
+            border-radius: 16px;
+        }
+
+        .checkout-actions {
+            flex-direction: column-reverse;
+        }
+
+        .back-cart-btn {
+            width: 100%;
+        }
+
+        .place-order-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="checkout-page">
+
+    <div class="checkout-container">
+
+        <!-- PAGE HEADER -->
+        <div class="checkout-header">
+
+            <a asp-controller="Cart"
+               asp-action="Index"
+               class="checkout-back">
+                <i class="bi bi-arrow-left"></i>
+                Back to Cart
+            </a>
+
+            <h1>Complete Your Order</h1>
+
+            <p>
+                Enter your details and choose your preferred payment method.
+            </p>
+
+        </div>
+
+
+        <form asp-action="Checkout" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div class="checkout-grid">
+
+               
+                    <!-- CUSTOMER INFORMATION -->
+                    <div class="checkout-card">
+
+                        <div class="card-title">
+
+                            <div class="card-title-icon">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+                            <div>
+                                <h2>Customer Information</h2>
+                                <p>Where should we deliver your order?</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="checkout-form-group">
+
+                            <label asp-for="Name">
+                                Full Name
+                            </label>
+
+                            <input asp-for="Name"
+                                   class="checkout-input"
+                                   placeholder="Enter your full name" />
+
+                            <span asp-validation-for="Name"
+                                  class="checkout-error"></span>
+
+                        </div>
+
+
+                        <div class="checkout-form-group">
+
+                            <label asp-for="PhoneNumber">
+                                Phone Number
+                            </label>
+
+                            <input asp-for="PhoneNumber"
+                                   class="checkout-input"
+                                   placeholder="Enter your phone number" />
+
+                            <span asp-validation-for="PhoneNumber"
+                                  class="checkout-error"></span>
+
+                        </div>
+
+
+                        <div class="checkout-form-group mb-0">
+
+                            <label asp-for="Address">
+                                Delivery Address
+                            </label>
+
+                            <textarea asp-for="Address"
+                                      class="checkout-textarea"
+                                      placeholder="Enter your complete delivery address"></textarea>
+
+                            <span asp-validation-for="Address"
+                                  class="checkout-error"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAYMENT METHOD -->
+                    <div class="checkout-card">
+
+                        <div class="card-title">
+
+                            <div class="card-title-icon">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+
+                            <div>
+                                <h2>Payment Method</h2>
+                                <p>Select how you would like to pay.</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-options">
+
+                            <!-- CASH -->
+                            <div class="payment-option">
+
+                                <input type="radio"
+                                       asp-for="PaymentMode"
+                                       value="Cash on Delivery"
+                                       id="cashPayment" />
+
+                                <label for="cashPayment"
+                                       class="payment-label">
+
+                                    <div class="payment-icon">
+                                        <i class="bi bi-cash-stack"></i>
+                                    </div>
+
+                                    <div class="payment-text">
+                                        <strong>Cash on Delivery</strong>
+                                        <span>Pay when your order arrives</span>
+                                    </div>
+
+                                </label>
+
+                            </div>
+
+
+                            <!-- UPI -->
+                            <div class="payment-option">
+
+                                <input type="radio"
+                                       asp-for="PaymentMode"
+                                       value="UPI"
+                                       id="upiPayment" />
+
+                                <label for="upiPayment"
+                                       class="payment-label">
+
+                                    <div class="payment-icon">
+                                        <i class="bi bi-phone"></i>
+                                    </div>
+
+                                    <div class="payment-text">
+                                        <strong>UPI</strong>
+                                        <span>Pay using your preferred UPI app</span>
+                                    </div>
+
+                                </label>
+
+                            </div>
+
+
+                            <!-- CARD -->
+                            <div class="payment-option">
+
+                                <input type="radio"
+                                       asp-for="PaymentMode"
+                                       value="Card"
+                                       id="cardPayment" />
+
+                                <label for="cardPayment"
+                                       class="payment-label">
+
+                                    <div class="payment-icon">
+                                        <i class="bi bi-credit-card-2-front"></i>
+                                    </div>
+
+                                    <div class="payment-text">
+                                        <strong>Card</strong>
+                                        <span>Pay securely using a debit or credit card</span>
+                                    </div>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+
+                        <span asp-validation-for="PaymentMode"
+                              class="checkout-error"></span>
+
+                    </div>
+
+
+                    <div class="checkout-card summary-card">
+
+                        <div class="card-title">
+
+                            <div class="card-title-icon">
+                                <i class="bi bi-bag-check"></i>
+                            </div>
+
+                            <div>
+                                <h2>Order Summary</h2>
+                                <p>Review before placing your order.</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>Delivery</span>
+
+                            <span>Standard</span>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>Payment</span>
+
+                            <span>Selected at checkout</span>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>Order Status</span>
+
+                            <span>Ready to place</span>
+
+                        </div>
+
+
+                        <div class="secure-box">
+
+                            <i class="bi bi-shield-check"></i>
+
+                            <div>
+                                <strong>Safe & Secure Checkout</strong>
+
+                                <span>
+                                    Your order information is handled securely
+                                    and is used only to process your purchase.
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="checkout-actions">
+
+                            <a asp-controller="Cart"
+                               asp-action="Index"
+                               class="back-cart-btn">
+
+                                <i class="bi bi-cart3"></i>
+                                Cart
+
+                            </a>
+
+
+                            <button type="submit"
+                                    class="place-order-btn">
+
+                                <i class="bi bi-check2-circle me-1"></i>
+                                Place Order
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

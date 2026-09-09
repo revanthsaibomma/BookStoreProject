@@ -1,0 +1,640 @@
+﻿@model List<BookStoreProject.DTOs.CartItemDto>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+    var total = Model?.Sum(x => x.TotalPrice) ?? 0;
+}
+
+<style>
+
+    /* =========================================================
+           BOOKNEST CART PAGE - DARK GOLD THEME
+           ========================================================= */
+
+    .cart-page {
+        background: radial-gradient(circle at 85% 10%, rgba(218, 169, 82, 0.08), transparent 28%), radial-gradient(circle at 10% 90%, rgba(218, 169, 82, 0.05), transparent 25%), #0b0d12;
+        min-height: calc(100vh - 80px);
+        padding: 55px 25px;
+        color: #ffffff;
+    }
+
+
+    /* MAIN CONTAINER */
+
+    .cart-container {
+        max-width: 1150px;
+        margin: auto;
+    }
+
+
+    /* =========================================================
+           HEADER
+           ========================================================= */
+
+    .cart-header {
+        margin-bottom: 30px;
+    }
+
+        .cart-header h1 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .cart-header p {
+            margin-top: 8px;
+            color: #9da7ba;
+            font-size: 15px;
+        }
+
+
+    /* =========================================================
+           CART LAYOUT
+           ========================================================= */
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 25px;
+        align-items: start;
+    }
+
+
+    /* =========================================================
+           CART ITEMS
+           ========================================================= */
+
+    .cart-items {
+        background: #11141b;
+        border: 1px solid rgba(218, 169, 82, 0.20);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+
+
+    .cart-item {
+        display: grid;
+        grid-template-columns: 85px 1fr auto;
+        gap: 20px;
+        padding: 22px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        align-items: center;
+        transition: background 0.25s ease;
+    }
+
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+
+        .cart-item:hover {
+            background: rgba(218, 169, 82, 0.035);
+        }
+
+
+    /* =========================================================
+           BOOK IMAGE
+           ========================================================= */
+
+    .book-image {
+        width: 78px;
+        height: 105px;
+        object-fit: cover;
+        border-radius: 9px;
+        background: #0c0f15;
+        border: 1px solid rgba(218, 169, 82, 0.18);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+
+    .book-placeholder {
+        width: 78px;
+        height: 105px;
+        border-radius: 9px;
+        background: #0c0f15;
+        border: 1px solid rgba(218, 169, 82, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #dca952;
+        font-size: 28px;
+    }
+
+
+    /* =========================================================
+           BOOK INFORMATION
+           ========================================================= */
+
+    .book-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+
+    .price {
+        color: #9da7ba;
+        font-size: 14px;
+        margin-top: 6px;
+    }
+
+
+    /* =========================================================
+           QUANTITY
+           ========================================================= */
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+
+    .quantity-btn {
+        width: 34px;
+        height: 34px;
+        border: 1px solid rgba(218, 169, 82, 0.30);
+        background: #0c0f15;
+        color: #dca952;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+
+        .quantity-btn:hover {
+            background: #dca952;
+            color: #111111;
+            border-color: #dca952;
+            transform: translateY(-2px);
+        }
+
+
+    .quantity-value {
+        min-width: 30px;
+        text-align: center;
+        font-weight: 700;
+        color: #ffffff;
+        font-size: 15px;
+    }
+
+
+    /* =========================================================
+           ITEM TOTAL
+           ========================================================= */
+
+    .item-total {
+        text-align: right;
+        font-size: 18px;
+        font-weight: 750;
+        color: #dca952;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+           ORDER SUMMARY
+           ========================================================= */
+
+    .summary {
+        background: linear-gradient( 145deg, #15171d, #101218 );
+        border: 1px solid rgba(218, 169, 82, 0.25);
+        border-radius: 18px;
+        padding: 25px;
+        position: sticky;
+        top: 25px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
+    }
+
+
+        .summary h3 {
+            margin: 0 0 25px;
+            color: #ffffff;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        color: #9da7ba;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+
+        .summary-row span:last-child {
+            color: #e9edf5;
+            font-weight: 600;
+        }
+
+
+    .summary-note {
+        color: #8f99ab;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-top: -15px;
+        margin-bottom: 25px;
+    }
+
+    .summary-total {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        margin-top: 20px;
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        font-weight: 800;
+        color: #ffffff;
+        font-size: 20px;
+    }
+
+
+        .summary-total span:last-child {
+            color: #dca952;
+        }
+
+
+    /* =========================================================
+           CHECKOUT BUTTON
+           ========================================================= */
+
+    .checkout-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 22px;
+        padding: 14px 18px;
+        background: linear-gradient( 135deg, #dca952, #c89135 );
+        color: #111111;
+        text-decoration: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        box-shadow: 0 8px 22px rgba(218, 169, 82, 0.18);
+        transition: all 0.25s ease;
+    }
+
+
+        .checkout-btn:hover {
+            color: #111111;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(218, 169, 82, 0.30);
+        }
+
+    /* =========================================================
+       ADD MORE BOOKS
+       ========================================================= */
+
+    .add-books-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 12px;
+        padding: 13px 18px;
+        background: transparent;
+        border: 1px solid rgba(218, 169, 82, 0.45);
+        border-radius: 10px;
+        color: #dca952;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+        transition: all 0.25s ease;
+    }
+
+
+        .add-books-btn span {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+
+        .add-books-btn:hover {
+            background: rgba(218, 169, 82, 0.10);
+            border-color: #dca952;
+            color: #f0c875;
+            transform: translateY(-2px);
+        }
+
+
+    /* =========================================================
+           EMPTY CART
+           ========================================================= */
+
+    .empty-cart {
+        background: linear-gradient( 145deg, #11141b, #0f1117 );
+        border: 1px solid rgba(218, 169, 82, 0.20);
+        border-radius: 18px;
+        padding: 90px 20px;
+        text-align: center;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+
+
+        .empty-cart i {
+            font-size: 60px;
+            color: #dca952;
+            opacity: 0.75;
+        }
+
+
+        .empty-cart h2 {
+            color: #ffffff;
+            margin: 18px 0 8px;
+            font-size: 28px;
+        }
+
+
+        .empty-cart p {
+            color: #9da7ba;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+
+    /* =========================================================
+           BROWSE BOOKS BUTTON
+           ========================================================= */
+
+    .shop-btn {
+        display: inline-block;
+        margin-top: 18px;
+        background: linear-gradient( 135deg, #dca952, #c89135 );
+        color: #111111;
+        padding: 12px 22px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        transition: all 0.25s ease;
+        box-shadow: 0 8px 20px rgba(218, 169, 82, 0.15);
+    }
+
+
+        .shop-btn:hover {
+            color: #111111;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(218, 169, 82, 0.28);
+        }
+
+
+    /* =========================================================
+           RESPONSIVE - TABLET
+           ========================================================= */
+
+    @@media (max-width: 800px) {
+
+        .cart-page {
+            padding: 40px 18px;
+        }
+
+        .cart-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .summary {
+            position: static;
+        }
+
+        .cart-header h1 {
+            font-size: 32px;
+        }
+    }
+
+
+    /* =========================================================
+           RESPONSIVE - MOBILE
+           ========================================================= */
+
+    @@media (max-width: 550px) {
+
+        .cart-page {
+            padding: 30px 14px;
+        }
+
+        .cart-header h1 {
+            font-size: 28px;
+        }
+
+        .cart-item {
+            grid-template-columns: 65px 1fr;
+            gap: 15px;
+            padding: 18px;
+        }
+
+        .book-image,
+        .book-placeholder {
+            width: 60px;
+            height: 82px;
+        }
+
+        .item-total {
+            grid-column: 2;
+            text-align: left;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+
+        .summary {
+            padding: 20px;
+        }
+    }
+
+</style>
+
+
+<div class="cart-page">
+
+    <div class="cart-container">
+
+        <div class="cart-header">
+
+            <h1>Shopping Cart</h1>
+
+            <p>
+                Review your selected books before checkout.
+            </p>
+
+        </div>
+
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="cart-layout">
+
+                <!-- CART ITEMS -->
+
+                <div class="cart-items">
+
+                    @foreach (var item in Model)
+                    {
+                        <div class="cart-item">
+
+                            @if (!string.IsNullOrEmpty(item.Image))
+                            {
+                                <img src="@item.Image"
+                                     class="book-image"
+                                     alt="@item.BookName" />
+                            }
+                            else
+                            {
+                                <div class="book-placeholder">
+                                    <i class="bi bi-book"></i>
+                                </div>
+                            }
+
+
+                            <div>
+
+                                <div class="book-name">
+                                    @item.BookName
+                                </div>
+
+                                <div class="price">
+                                    ₹@item.Price.ToString("N2") each
+                                </div>
+
+
+                                <div class="quantity-controls">
+
+                                    <a asp-action="Decrease"
+                                       asp-route-id="@item.CartDetailId"
+                                       class="quantity-btn">
+                                        <i class="bi bi-dash"></i>
+                                    </a>
+
+                                    <span class="quantity-value">
+                                        @item.Quantity
+                                    </span>
+
+                                    <a asp-action="Increase"
+                                       asp-route-id="@item.CartDetailId"
+                                       class="quantity-btn">
+                                        <i class="bi bi-plus"></i>
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="item-total">
+
+                                ₹@item.TotalPrice.ToString("N2")
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+
+                <!-- SUMMARY -->
+
+                <div class="summary">
+                    <h3>Order Summary</h3>
+
+                    <p class="summary-note">
+                        Happy with your selection? Add more books or continue to checkout.
+                    </p>
+
+
+                    <div class="summary-row">
+
+                        <span>Items</span>
+
+                        <span>
+                            @Model.Sum(x => x.Quantity)
+                        </span>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>Subtotal</span>
+
+                        <span>
+                            ₹@total.ToString("N2")
+                        </span>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>Delivery</span>
+
+                        <span style="color:#047857;">
+                            Free
+                        </span>
+
+                    </div>
+
+                    <div class="summary-total">
+
+                        <span>Total</span>
+
+                        <span>
+                            ₹@total.ToString("N2")
+                        </span>
+
+                    </div>
+
+                    <a asp-controller="Order"
+                       asp-action="Checkout"
+                       class="checkout-btn">
+                        Proceed to Checkout
+                        <span>→</span>
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="add-books-btn">
+                        <span>＋</span>
+                        Add More Books
+                    </a>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="empty-cart">
+
+                <i class="bi bi-cart3"></i>
+
+                <h2>Your cart is empty</h2>
+
+                <p>
+                    Looks like you haven't added any books yet.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="shop-btn">
+
+                    Browse Books
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

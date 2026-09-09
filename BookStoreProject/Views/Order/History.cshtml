@@ -1,0 +1,663 @@
+﻿@model IEnumerable<BookStoreProject.DTOs.OrderDto>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<style>
+    /* =========================================================
+           BOOKNEST - MY ORDERS
+           DARK + GOLD THEME
+           ========================================================= */
+
+    .history-page {
+        min-height: calc(100vh - 70px);
+        background: #0b0d12;
+        padding: 45px 25px 70px;
+    }
+
+    .history-container {
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    /* =========================
+           HEADER
+           ========================= */
+
+    .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 30px;
+        gap: 20px;
+    }
+
+        .history-header h1 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        .history-header p {
+            color: #929bad;
+            font-size: 14px;
+            margin: 8px 0 0;
+        }
+
+    .order-count {
+        background: rgba(220, 169, 82, 0.10);
+        border: 1px solid rgba(220, 169, 82, 0.25);
+        color: #dca952;
+        padding: 9px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    /* =========================
+           ORDER CARD
+           ========================= */
+
+    .order-card {
+        background: #11141b;
+        border: 1px solid #292e38;
+        border-radius: 18px;
+        margin-bottom: 22px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.20);
+        transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+    }
+
+        .order-card:hover {
+            border-color: rgba(220, 169, 82, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+        }
+
+    /* =========================
+           ORDER HEADER
+           ========================= */
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        background: #151922;
+        border-bottom: 1px solid #292e38;
+        gap: 15px;
+    }
+
+    .order-id {
+        color: #dca952;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .order-date {
+        color: #7f899b;
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+        .order-date i {
+            margin-right: 4px;
+        }
+
+    /* =========================
+           STATUS
+           ========================= */
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 13px;
+        border-radius: 20px;
+        background: rgba(220, 169, 82, 0.12);
+        border: 1px solid rgba(220, 169, 82, 0.22);
+        color: #e5b65e;
+        font-size: 11px;
+        font-weight: 750;
+    }
+
+    /* =========================
+           BODY
+           ========================= */
+
+    .order-body {
+        padding: 24px;
+    }
+
+    /* CUSTOMER INFORMATION */
+
+    .customer-info {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .info-box {
+        background: #171b24;
+        border: 1px solid #292f39;
+        border-radius: 11px;
+        padding: 14px 15px;
+    }
+
+    .info-label {
+        color: #737d90;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .7px;
+        font-weight: 750;
+        margin-bottom: 6px;
+    }
+
+    .info-value {
+        color: #e5e7eb;
+        font-size: 13px;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
+    /* =========================
+           ITEMS
+           ========================= */
+
+    .items {
+        border-top: 1px solid #292e38;
+        padding-top: 20px;
+    }
+
+    .items-heading {
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 750;
+        margin-bottom: 10px;
+    }
+
+        .items-heading i {
+            color: #dca952;
+            margin-right: 6px;
+        }
+
+    .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid #242933;
+        gap: 20px;
+    }
+
+        .item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+    .item-name {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 0;
+    }
+
+    .book-icon {
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(220, 169, 82, 0.10);
+        border: 1px solid rgba(220, 169, 82, 0.18);
+        color: #dca952;
+    }
+
+    .book-title {
+        color: #e6e8ed;
+        font-size: 13px;
+        font-weight: 650;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .item-qty {
+        color: #858fa1;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    /* =========================
+           FOOTER
+           ========================= */
+
+    .order-footer {
+        padding: 18px 24px;
+        border-top: 1px solid #292e38;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        background: #0f1218;
+    }
+
+    .payment {
+        color: #8e98aa;
+        font-size: 12px;
+    }
+
+        .payment i {
+            color: #dca952;
+            margin-right: 5px;
+        }
+
+        .payment strong {
+            color: #dfe2e8;
+        }
+
+    .invoice-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: #dca952;
+        color: #111111;
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 750;
+        transition: .2s ease;
+    }
+
+        .invoice-btn:hover {
+            background: #efbf69;
+            color: #111111;
+            transform: translateY(-1px);
+        }
+
+    /* =========================
+           EMPTY ORDERS
+           ========================= */
+
+    .empty-history {
+        background: #11141b;
+        border: 1px solid #292e38;
+        border-radius: 20px;
+        padding: 75px 25px;
+        text-align: center;
+        box-shadow: 0 12px 35px rgba(0,0,0,.18);
+    }
+
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+        background: rgba(220,169,82,.10);
+        border: 1px solid rgba(220,169,82,.22);
+        color: #dca952;
+        font-size: 36px;
+    }
+
+    .empty-history h2 {
+        color: #ffffff;
+        font-size: 24px;
+        font-weight: 750;
+        margin: 0 0 8px;
+    }
+
+    .empty-history p {
+        color: #8f99aa;
+        font-size: 14px;
+        margin: 0 0 22px;
+    }
+
+    .shop-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 11px 18px;
+        background: #dca952;
+        color: #111111;
+        text-decoration: none;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 750;
+        transition: .2s ease;
+    }
+
+        .shop-btn:hover {
+            background: #efbf69;
+            color: #111111;
+            transform: translateY(-1px);
+        }
+
+    /* =========================
+           MOBILE
+           ========================= */
+
+    @@media(max-width:700px) {
+
+        .history-page {
+            padding: 30px 15px 50px;
+        }
+
+        .history-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+            .history-header h1 {
+                font-size: 29px;
+            }
+
+        .order-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .customer-info {
+            grid-template-columns: 1fr;
+        }
+
+        .order-body {
+            padding: 20px;
+        }
+
+        .order-footer {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .invoice-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @@media(max-width:450px) {
+
+        .history-page {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .order-header {
+            padding: 17px;
+        }
+
+        .order-body {
+            padding: 17px;
+        }
+
+        .order-footer {
+            padding: 17px;
+        }
+
+        .item {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .item-qty {
+            padding-left: 45px;
+        }
+    }
+
+</style>
+
+
+<div class="history-page">
+
+    <div class="history-container">
+
+        <!-- HEADER -->
+
+        <div class="history-header">
+
+            <div>
+
+                <h1>
+                    My Orders
+                </h1>
+
+                <p>
+                    Track your previous purchases and download invoices.
+                </p>
+
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="order-count">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    @Model.Count()
+                    @(Model.Count() == 1 ? "Order" : "Orders")
+
+                </div>
+            }
+
+        </div>
+
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var order in Model)
+            {
+                <div class="order-card">
+
+                    <!-- ORDER HEADER -->
+
+                    <div class="order-header">
+
+                        <div>
+
+                            <div class="order-id">
+
+                                <i class="bi bi-receipt me-1"></i>
+
+                                Order #@order.Id
+
+                            </div>
+
+                            <div class="order-date">
+
+                                <i class="bi bi-calendar3"></i>
+                                @order.CreateDate.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="status">
+
+                            <i class="bi bi-circle-fill"
+                               style="font-size:6px;"></i>
+
+                            @order.StatusName
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- ORDER BODY -->
+
+                    <div class="order-body">
+
+                        <!-- CUSTOMER INFORMATION -->
+
+                        <div class="customer-info">
+
+                            <div class="info-box">
+
+                                <div class="info-label">
+                                    Delivery Address
+                                </div>
+
+                                <div class="info-value">
+
+                                    <i class="bi bi-geo-alt me-1"></i>
+
+                                    @order.Address
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="info-box">
+
+                                <div class="info-label">
+                                    Phone Number
+                                </div>
+
+                                <div class="info-value">
+
+                                    <i class="bi bi-telephone me-1"></i>
+
+                                    @order.PhoneNumber
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ORDERED BOOKS -->
+
+                        <div class="items">
+
+                            <div class="items-heading">
+
+                                <i class="bi bi-book"></i>
+
+                                Ordered Books
+
+                            </div>
+
+
+                            @if (order.OrderDetails != null &&
+                                 order.OrderDetails.Any())
+                            {
+                                foreach (var item in order.OrderDetails)
+                                {
+                                    <div class="item">
+
+                                        <div class="item-name">
+
+                                            <div class="book-icon">
+
+                                                <i class="bi bi-book-half"></i>
+
+                                            </div>
+
+                                            <div class="book-title">
+
+                                                @item.BookName
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="item-qty">
+
+                                            Quantity:
+                                            <strong>
+                                                @item.Quantity
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FOOTER -->
+
+                    <div class="order-footer">
+
+                        <div class="payment">
+
+                            <i class="bi bi-credit-card"></i>
+
+                            Payment:
+                            <strong>
+                                @order.PaymentMode
+                            </strong>
+
+                        </div>
+
+
+                        <a asp-action="DownloadInvoice"
+                           asp-route-id="@order.Id"
+                           class="invoice-btn">
+
+                            <i class="bi bi-file-earmark-pdf"></i>
+
+                            Download Invoice
+
+                        </a>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <!-- EMPTY STATE -->
+
+            <div class="empty-history">
+
+                <div class="empty-icon">
+
+                    <i class="bi bi-receipt"></i>
+
+                </div>
+
+                <h2>
+                    No Orders Yet
+                </h2>
+
+                <p>
+                    Once you place an order, it will appear here.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="shop-btn">
+
+                    <i class="bi bi-book"></i>
+
+                    Start Shopping
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

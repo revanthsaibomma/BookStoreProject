@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "genreName": "Fiction"
+  },
+  {
+    "id": 2,
+    "genreName": "Programming"
+  },
+  {
+    "id": 3,
+    "genreName": "Self Help"
+  },
+  {
+    "id": 4,
+    "genreName": "Science"
+  },
+  {
+    "id": 5,
+    "genreName": "Romance"
+  },
+  {
+    "id": 6,
+    "genreName": "Mystery"
+  },
+  {
+    "id": 7,
+    "genreName": "Thriller"
+  },
+  {
+    "id": 8,
+    "genreName": "Fantasy"
+  },
+  {
+    "id": 9,
+    "genreName": "Biography"
+  },
+  {
+    "id": 10,
+    "genreName": "History"
+  }
+]

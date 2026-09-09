@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "genreName": "Fiction"
+  },
+  {
+    "id": 2,
+    "genreName": "Programming"
+  },
+  {
+    "id": 3,
+    "genreName": "Self Help"
+  },
+  {
+    "id": 4,
+    "genreName": "Science"
+  }
+]

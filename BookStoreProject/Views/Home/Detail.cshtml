@@ -1,0 +1,835 @@
+﻿@* @model BookStoreProject.DTOs.BookDisplayDto
+
+@{
+    ViewData["Title"] = Model.BookName;
+}
+
+<style>
+    .detail-page {
+        background: #f7f8fc;
+        min-height: calc(100vh - 70px);
+        padding: 40px 20px;
+    }
+
+    .detail-container {
+        max-width: 1050px;
+        margin: auto;
+    }
+
+    .back-link {
+        color: #64748b;
+        text-decoration: none;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 20px;
+    }
+
+    .back-link:hover {
+        color: #4f46e5;
+    }
+
+    .detail-card {
+        background: white;
+        border-radius: 20px;
+        border: 1px solid #e7eaf0;
+        padding: 35px;
+        box-shadow: 0 8px 30px rgba(20,30,50,.05);
+    }
+
+    .detail-layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 50px;
+    }
+
+    .book-cover {
+        width: 300px;
+        height: 410px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(0,0,0,.13);
+    }
+
+    .cover-placeholder {
+        width: 300px;
+        height: 410px;
+        border-radius: 12px;
+        background: #eef1f6;
+        color: #aab2c0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 70px;
+    }
+
+    .genre {
+        display: inline-block;
+        color: #4f46e5;
+        background: #eef2ff;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 750;
+        text-transform: uppercase;
+    }
+
+    .book-title {
+        font-size: 38px;
+        line-height: 1.15;
+        color: #172033;
+        margin: 17px 0 6px;
+        font-weight: 800;
+    }
+
+    .author {
+        color: #7a8497;
+        font-size: 15px;
+    }
+
+    .price {
+        font-size: 30px;
+        font-weight: 800;
+        color: #263044;
+        margin: 25px 0;
+    }
+
+    .description-title {
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .description {
+        color: #64748b;
+        line-height: 1.75;
+        font-size: 14px;
+    }
+
+    .stock {
+        margin-top: 22px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #ecfdf5;
+        color: #047857;
+        padding: 9px 13px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+    .out-stock {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .actions {
+        margin-top: 25px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .cart-button {
+        background: #4f46e5;
+        color: white;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .cart-button:hover {
+        color: white;
+        background: #4338ca;
+    }
+
+    .back-button {
+        background: #f1f3f7;
+        color: #475569;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 650;
+    }
+
+    @@media(max-width:750px) {
+        .detail-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .book-cover,
+        .cover-placeholder {
+            width: 220px;
+            height: 300px;
+        }
+
+        .book-title {
+            font-size: 30px;
+        }
+
+        .detail-card {
+            padding: 22px;
+        }
+    }
+</style>
+
+
+<div class="detail-page">
+
+    <div class="detail-container">
+
+        <a asp-action="Index"
+           class="back-link">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Books
+
+        </a>
+
+
+        <div class="detail-card">
+
+            <div class="detail-layout">
+
+                <div>
+
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="@Model.Image"
+                             class="book-cover"
+                             alt="@Model.BookName" />
+                    }
+                    else
+                    {
+                        <div class="cover-placeholder">
+                            <i class="bi bi-book"></i>
+                        </div>
+                    }
+
+                </div>
+
+
+                <div>
+
+                    <span class="genre">
+                        @Model.GenreName
+                    </span>
+
+                    <h1 class="book-title">
+                        @Model.BookName
+                    </h1>
+
+                    <div class="author">
+                        Written by @Model.AuthorName
+                    </div>
+
+                    <div class="price">
+                        ₹@Model.Price.ToString("N2")
+                    </div>
+
+                    <div class="description-title">
+                        About this book
+                    </div>
+
+                    <div class="description">
+                        @Model.Description
+                    </div>
+
+
+                    @if (Model.Stock > 0)
+                    {
+                        <div class="stock">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            @Model.Stock copies available
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="stock out-stock">
+
+                            <i class="bi bi-x-circle"></i>
+
+                            Currently unavailable
+
+                        </div>
+                    }
+
+
+                    <div class="actions">
+
+                        @if (Model.Stock > 0)
+                        {
+                            <a asp-controller="Cart"
+                               asp-action="addtocart"
+                               asp-route-bookId="@Model.BookId"
+                               class="cart-button">
+
+                                <i class="bi bi-cart-plus"></i>
+
+                                Add to Cart
+
+                            </a>
+                        }
+
+                        <a asp-action="Index"
+                           class="back-button">
+
+                            Continue Shopping
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div> *@
+
+
+@model BookStoreProject.DTOs.BookDisplayDto
+
+@{
+    ViewData["Title"] = Model.BookName;
+}
+
+<style>
+
+    /* =========================================================
+           BOOKNEST - BOOK DETAILS PAGE
+           DARK + GOLD THEME
+           ========================================================= */
+
+    .detail-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 25px 70px;
+        background: radial-gradient( circle at 10% 20%, rgba(218, 169, 82, 0.08), transparent 30% ), radial-gradient( circle at 90% 80%, rgba(218, 169, 82, 0.06), transparent 30% ), #0b0d12;
+        color: #ffffff;
+    }
+
+
+    /* =========================================================
+           CONTAINER
+           ========================================================= */
+
+    .detail-container {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================================================
+           BACK LINK
+           ========================================================= */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 22px;
+        color: #9da7ba;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: 0.2s ease;
+    }
+
+        .back-link:hover {
+            color: #dca952;
+        }
+
+
+    /* =========================================================
+           MAIN CARD
+           ========================================================= */
+
+    .detail-card {
+        background: linear-gradient( 145deg, #11141b, #0f1218 );
+        border: 1px solid rgba(218, 169, 82, 0.22);
+        border-radius: 24px;
+        padding: 42px;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45), 0 0 35px rgba(218, 169, 82, 0.04);
+        overflow: hidden;
+        position: relative;
+    }
+
+
+        /* Decorative gold glow */
+
+        .detail-card::before {
+            content: "";
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: rgba(218, 169, 82, 0.05);
+            filter: blur(10px);
+            top: -180px;
+            right: -150px;
+            pointer-events: none;
+        }
+
+
+    /* =========================================================
+           LAYOUT
+           ========================================================= */
+
+    .detail-layout {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 55px;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+
+
+    /* =========================================================
+           BOOK COVER
+           ========================================================= */
+
+    .book-cover {
+        width: 320px;
+        height: 435px;
+        object-fit: cover;
+        border-radius: 14px;
+        border: 1px solid rgba(218, 169, 82, 0.25);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), 0 0 25px rgba(218, 169, 82, 0.05);
+        transition: 0.3s ease;
+    }
+
+
+        .book-cover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.55), 0 0 30px rgba(218, 169, 82, 0.10);
+        }
+
+
+    /* =========================================================
+           PLACEHOLDER
+           ========================================================= */
+
+    .cover-placeholder {
+        width: 320px;
+        height: 435px;
+        border-radius: 14px;
+        background: #171a21;
+        border: 1px solid rgba(218, 169, 82, 0.20);
+        color: #697386;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 70px;
+    }
+
+
+    /* =========================================================
+           GENRE
+           ========================================================= */
+
+    .genre {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 20px;
+        color: #dca952;
+        background: rgba(218, 169, 82, 0.10);
+        border: 1px solid rgba(218, 169, 82, 0.22);
+        font-size: 11px;
+        font-weight: 750;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+
+    /* =========================================================
+           BOOK TITLE
+           ========================================================= */
+
+    .book-title {
+        margin: 18px 0 7px;
+        color: #ffffff;
+        font-size: 42px;
+        line-height: 1.15;
+        font-weight: 700;
+        letter-spacing: -1px;
+    }
+
+
+    /* =========================================================
+           AUTHOR
+           ========================================================= */
+
+    .author {
+        color: #9da7ba;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+
+    /* =========================================================
+           PRICE
+           ========================================================= */
+
+    .price {
+        margin: 28px 0;
+        color: #dca952;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+
+    /* =========================================================
+           DESCRIPTION
+           ========================================================= */
+
+    .description-title {
+        margin-bottom: 9px;
+        color: #ffffff;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+
+    .description {
+        max-width: 600px;
+        color: #9da7ba;
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+
+    /* =========================================================
+           STOCK
+           ========================================================= */
+
+    .stock {
+        margin-top: 23px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: rgba(16, 185, 129, 0.10);
+        border: 1px solid rgba(16, 185, 129, 0.18);
+        color: #34d399;
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+
+    .out-stock {
+        background: rgba(239, 68, 68, 0.10);
+        border-color: rgba(239, 68, 68, 0.18);
+        color: #ff8585;
+    }
+
+
+    /* =========================================================
+           ACTION BUTTONS
+           ========================================================= */
+
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+
+    /* ADD TO CART */
+
+    .cart-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 52px;
+        padding: 0 24px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient( 135deg, #dca952, #c89135 );
+        color: #111111;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+        box-shadow: 0 8px 20px rgba(218, 169, 82, 0.18);
+        transition: all 0.25s ease;
+    }
+
+
+        .cart-button:hover {
+            color: #111111;
+            transform: translateY(-2px);
+            background: linear-gradient( 135deg, #e6b765, #dca952 );
+            box-shadow: 0 12px 28px rgba(218, 169, 82, 0.28);
+        }
+
+
+    /* CONTINUE SHOPPING */
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0 24px;
+        border-radius: 10px;
+        background: #1a1e27;
+        border: 1px solid #2a303c;
+        color: #c7cedb;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 650;
+        transition: 0.25s ease;
+    }
+
+
+        .back-button:hover {
+            color: #dca952;
+            border-color: rgba(218, 169, 82, 0.40);
+            background: #20242d;
+        }
+
+
+    /* =========================================================
+           MOBILE
+           ========================================================= */
+
+    @@media (max-width: 850px) {
+
+        .detail-page {
+            padding: 30px 18px 50px;
+        }
+
+        .detail-card {
+            padding: 28px;
+        }
+
+        .detail-layout {
+            grid-template-columns: 1fr;
+            gap: 35px;
+        }
+
+        .book-cover,
+        .cover-placeholder {
+            width: 260px;
+            height: 355px;
+            margin: 0 auto;
+        }
+
+        .book-title {
+            font-size: 34px;
+        }
+    }
+
+
+    @@media (max-width: 550px) {
+
+        .detail-card {
+            padding: 22px;
+        }
+
+        .book-cover,
+        .cover-placeholder {
+            width: 210px;
+            height: 290px;
+        }
+
+        .book-title {
+            font-size: 29px;
+        }
+
+        .price {
+            font-size: 28px;
+        }
+
+        .actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .cart-button,
+        .back-button {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+</style>
+
+
+<div class="detail-page">
+
+    <div class="detail-container">
+
+        <!-- BACK TO BOOKS -->
+
+        <a asp-action="Index"
+           class="back-link">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Books
+
+        </a>
+
+
+        <!-- DETAILS CARD -->
+
+        <div class="detail-card">
+
+            <div class="detail-layout">
+
+
+                <!-- BOOK IMAGE -->
+
+                <div>
+
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="@Model.Image"
+                             class="book-cover"
+                             alt="@Model.BookName" />
+                    }
+                    else
+                    {
+                        <div class="cover-placeholder">
+
+                            <i class="bi bi-book"></i>
+
+                        </div>
+                    }
+
+                </div>
+
+
+                <!-- BOOK INFORMATION -->
+
+                <div>
+
+                    <!-- GENRE -->
+
+                    <span class="genre">
+
+                        @Model.GenreName
+
+                    </span>
+
+
+                    <!-- BOOK NAME -->
+
+                    <h1 class="book-title">
+
+                        @Model.BookName
+
+                    </h1>
+
+
+                    <!-- AUTHOR -->
+
+                    <div class="author">
+
+                        Written by @Model.AuthorName
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="price">
+
+                        ₹@Model.Price.ToString("N2")
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="description-title">
+
+                        About this book
+
+                    </div>
+
+                    <div class="description">
+
+                        @Model.Description
+
+                    </div>
+
+
+                    <!-- STOCK -->
+                    @if (Model.Stock > 0)
+                    {
+                        <div class="stock">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            @Model.Stock copies available
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="stock out-stock">
+
+                            <i class="bi bi-x-circle"></i>
+
+                            Currently unavailable
+
+                        </div>
+                    }
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="actions">
+
+                        @if (Model.Stock > 0)
+                        {
+                            <a asp-controller="Cart"
+                               asp-action="addtocart"
+                               asp-route-bookId="@Model.BookId"
+                               class="cart-button">
+
+                                <i class="bi bi-cart-plus"></i>
+
+                                Add to Cart
+
+                            </a>
+                        }
+
+
+                        <a asp-action="Index"
+                           class="back-button">
+
+                            <i class="bi bi-arrow-left"></i>
+
+                            Continue Shopping
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

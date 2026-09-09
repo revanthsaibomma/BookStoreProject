@@ -1,0 +1,182 @@
+[
+  {
+    "bookName": "The Alchemist",
+    "authorName": "Paulo Coelho",
+    "price": 399,
+    "genreId": 1,
+    "stock": 25,
+    "image": "https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg",
+    "description": "A philosophical novel about following your dreams and discovering your personal destiny."
+  },
+  {
+    "bookName": "Atomic Habits",
+    "authorName": "James Clear",
+    "price": 499,
+    "genreId": 3,
+    "stock": 40,
+    "image": "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
+    "description": "A practical guide to building good habits and breaking bad ones."
+  },
+  {
+    "bookName": "Rich Dad Poor Dad",
+    "authorName": "Robert T. Kiyosaki",
+    "price": 450,
+    "genreId": 3,
+    "stock": 30,
+    "image": "https://covers.openlibrary.org/b/isbn/9781612681139-L.jpg",
+    "description": "A personal finance book about money, investing and financial education."
+  },
+  {
+    "bookName": "The Psychology of Money",
+    "authorName": "Morgan Housel",
+    "price": 550,
+    "genreId": 3,
+    "stock": 35,
+    "image": "https://covers.openlibrary.org/b/isbn/9780857197689-L.jpg",
+    "description": "Timeless lessons about wealth, greed, happiness and financial behavior."
+  },
+  {
+    "bookName": "1984",
+    "authorName": "George Orwell",
+    "price": 299,
+    "genreId": 1,
+    "stock": 20,
+    "image": "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg",
+    "description": "A dystopian novel about surveillance, control and totalitarian society."
+  },
+  {
+    "bookName": "Animal Farm",
+    "authorName": "George Orwell",
+    "price": 249,
+    "genreId": 1,
+    "stock": 28,
+    "image": "https://covers.openlibrary.org/b/isbn/9780451526342-L.jpg",
+    "description": "A political satire about revolution, power and corruption."
+  },
+  {
+    "bookName": "Harry Potter and the Philosopher's Stone",
+    "authorName": "J.K. Rowling",
+    "price": 599,
+    "genreId": 8,
+    "stock": 45,
+    "image": "https://covers.openlibrary.org/b/isbn/9780590353427-L.jpg",
+    "description": "A young wizard discovers his magical heritage and begins his journey at Hogwarts."
+  },
+  {
+    "bookName": "The Hobbit",
+    "authorName": "J.R.R. Tolkien",
+    "price": 499,
+    "genreId": 8,
+    "stock": 32,
+    "image": "https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg",
+    "description": "Bilbo Baggins joins an adventurous quest to reclaim a treasure guarded by a dragon."
+  },
+  {
+    "bookName": "The Da Vinci Code",
+    "authorName": "Dan Brown",
+    "price": 399,
+    "genreId": 6,
+    "stock": 22,
+    "image": "https://covers.openlibrary.org/b/isbn/9780307474278-L.jpg",
+    "description": "A mystery thriller involving secret societies, historical clues and hidden symbols."
+  },
+  {
+    "bookName": "Gone Girl",
+    "authorName": "Gillian Flynn",
+    "price": 449,
+    "genreId": 7,
+    "stock": 18,
+    "image": "https://covers.openlibrary.org/b/olid/OL25438288M-L.jpg",
+    "description": "A psychological thriller surrounding a mysterious disappearance and a troubled marriage."
+  },
+  {
+    "bookName": "Pride and Prejudice",
+    "authorName": "Jane Austen",
+    "price": 299,
+    "genreId": 5,
+    "stock": 24,
+    "image": "https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg",
+    "description": "A classic romance exploring love, society, family and personal misunderstandings."
+  },
+  {
+    "bookName": "The Fault in Our Stars",
+    "authorName": "John Green",
+    "price": 349,
+    "genreId": 5,
+    "stock": 27,
+    "image": "https://covers.openlibrary.org/b/isbn/9780062024039-L.jpg",
+    "description": "A moving story about love, friendship and two young people facing difficult circumstances."
+  },
+  {
+    "bookName": "Sapiens",
+    "authorName": "Yuval Noah Harari",
+    "price": 699,
+    "genreId": 9,
+    "stock": 15,
+    "image": "https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg",
+    "description": "An exploration of human history, civilization and the development of modern society."
+  },
+  {
+    "bookName": "A Brief History of Time",
+    "authorName": "Stephen Hawking",
+    "price": 599,
+    "genreId": 4,
+    "stock": 19,
+    "image": "https://covers.openlibrary.org/b/isbn/9780553380163-L.jpg",
+    "description": "An accessible introduction to cosmology, space, time and the universe."
+  },
+  {
+    "bookName": "The Silent Patient",
+    "authorName": "Alex Michaelides",
+    "price": 449,
+    "genreId": 6,
+    "stock": 21,
+    "image": "https://covers.openlibrary.org/b/isbn/9781250301697-L.jpg",
+    "description": "A psychological mystery about a woman who suddenly stops speaking after a shocking event."
+  },
+  {
+    "bookName": "Think and Grow Rich",
+    "authorName": "Napoleon Hill",
+    "price": 299,
+    "genreId": 3,
+    "stock": 33,
+    "image": "https://covers.openlibrary.org/b/isbn/9781585424337-L.jpg",
+    "description": "A classic self-help book focused on mindset, ambition and achieving financial success."
+  },
+  {
+    "bookName": "The Book Thief",
+    "authorName": "Markus Zusak",
+    "price": 399,
+    "genreId": 1,
+    "stock": 17,
+    "image": "https://covers.openlibrary.org/b/isbn/9780375842207-L.jpg",
+    "description": "A historical fiction story about a young girl, books and life during World War II."
+  },
+  {
+    "bookName": "It Ends with Us",
+    "authorName": "Colleen Hoover",
+    "price": 499,
+    "genreId": 5,
+    "stock": 38,
+    "image": "https://covers.openlibrary.org/b/isbn/9781501110368-L.jpg",
+    "description": "An emotional romance about love, relationships, difficult choices and personal strength."
+  },
+  {
+    "bookName": "Deep Work",
+    "authorName": "Cal Newport",
+    "price": 525,
+    "genreId": 3,
+    "stock": 26,
+    "image": "https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg",
+    "description": "A guide to focused work, productivity and developing valuable skills in a distracted world."
+  },
+  {
+    "bookName": "The Midnight Library",
+    "authorName": "Matt Haig",
+    "price": 399,
+    "genreId": 1,
+    "stock": 31,
+    "image": "https://covers.openlibrary.org/b/isbn/9780525559474-L.jpg",
+    "description": "A novel about choices, alternate lives and discovering what makes life meaningful."
+  }
+]
