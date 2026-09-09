@@ -129,6 +129,8 @@ namespace BookStoreProject.Mapping
             // BookSalesVM -> BookSalesDto
             CreateMap<BookSalesVM, BookSalesDto>();
 
+            CreateMap<GenreSalesVM, GenreSalesDto>();
+
 
             // =========================
             // USER

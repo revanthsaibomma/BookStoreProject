@@ -11,5 +11,7 @@
         public List<MonthlyRevenueVM> MonthlyRevenue { get; set; } = new();
 
         public List<BookSalesVM> BookSales { get; set; } = new();
+
+        public List<GenreSalesVM> GenreSales { get; set; } = new();
     }
 }

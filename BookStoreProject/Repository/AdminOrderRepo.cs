@@ -42,6 +42,7 @@ namespace BookStoreProject.Repository
             var orders = await _context.Orders
                 .Include(o => o.OrderDetails)
                 .ThenInclude(d => d.Book)
+                .ThenInclude(b => b.Genre)
                 .ToListAsync();
 
             AdminDashboardVM dashboard = new();
@@ -75,12 +76,45 @@ namespace BookStoreProject.Repository
                             CultureInfo.InvariantCulture))
                 .ToList();
 
+            //dashboard.BookSales = orders
+            //    .SelectMany(o => o.OrderDetails)
+            //    .GroupBy(x => x.Book.BookName)
+            //    .Select(g => new BookSalesVM
+            //    {
+            //        BookName = g.Key,
+
+            //        CopiesSold = g.Sum(x => x.Quantity)
+            //    })
+            //    .OrderByDescending(x => x.CopiesSold)
+            //    .ToList();
+
+            //return dashboard;
             dashboard.BookSales = orders
                 .SelectMany(o => o.OrderDetails)
-                .GroupBy(x => x.Book.BookName)
-                .Select(g => new BookSalesVM
+    .Where(x => x.Book != null)
+    .GroupBy(x => x.Book.BookName)
+    .Select(g => new BookSalesVM
+    {
+        BookName = g.Key,
+
+        CopiesSold = g.Sum(x => x.Quantity)
+    })
+    .OrderByDescending(x => x.CopiesSold)
+    .Take(5)
+    .ToList();
+
+
+            // ==========================
+            // SALES BY GENRE
+            // ==========================
+
+            dashboard.GenreSales = orders
+                .SelectMany(o => o.OrderDetails)
+                .Where(x => x.Book != null && x.Book.Genre != null)
+                .GroupBy(x => x.Book.Genre.GenreName)
+                .Select(g => new GenreSalesVM
                 {
-                    BookName = g.Key,
+                    GenreName = g.Key,
 
                     CopiesSold = g.Sum(x => x.Quantity)
                 })

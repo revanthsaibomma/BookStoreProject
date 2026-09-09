@@ -1,4 +1,4 @@
-﻿@model BookStoreProject.DTOs.AdminDashboardDto
+﻿@* @model BookStoreProject.DTOs.AdminDashboardDto
 
 @{
     ViewData["Title"] = "Admin Dashboard";
@@ -480,6 +480,987 @@
             </div>
 
         </div>
+
+
+        <!-- QUICK ACTIONS -->
+        <div class="panel">
+
+            <div class="panel-header">
+                <h3>Quick Actions</h3>
+                <span>Manage your bookstore</span>
+            </div>
+
+            <div class="quick-actions">
+
+                <a asp-controller="AdminBooks"
+                   asp-action="Index"
+                   class="quick-action">
+
+                    <i class="bi bi-book"></i>
+
+                    <span>Manage Books</span>
+
+                </a>
+
+
+                <a asp-controller="AdminOrder"
+                   asp-action="AdminManageOrders"
+                   class="quick-action">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    <span>Manage Orders</span>
+
+                </a>
+
+
+                <a asp-controller="AdminUsers"
+                   asp-action="Index"
+                   class="quick-action">
+
+                    <i class="bi bi-people"></i>
+
+                    <span>Manage Users</span>
+
+                </a>
+
+
+                <a asp-controller="AdminGenre"
+                   asp-action="Index"
+                   class="quick-action">
+
+                    <i class="bi bi-tags"></i>
+
+                    <span>Manage Genre</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div> *@
+
+
+@model BookStoreProject.DTOs.AdminDashboardDto
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    .admin-page {
+        background: #f5f7fb;
+        min-height: calc(100vh - 70px);
+        padding: 30px;
+    }
+
+    .dashboard-wrapper {
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+        .dashboard-header h1 {
+            font-size: 30px;
+            font-weight: 700;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .dashboard-header p {
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+    .admin-badge {
+        background: #eef2ff;
+        color: #4f46e5;
+        padding: 9px 16px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+        border: 1px solid #e8edf5;
+    }
+
+    .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+        background: #eef2ff;
+        color: #4f46e5;
+    }
+
+    .stat-title {
+        color: #64748b;
+        font-size: 14px;
+        margin-top: 18px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-top: 5px;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .panel {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #e8edf5;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+        padding: 24px;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .panel-header h3 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .panel-header span {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+    .revenue-list {
+        display: flex;
+        flex-direction: column;
+        gap: 17px;
+    }
+
+    .revenue-row {
+        display: grid;
+        grid-template-columns: 90px 1fr 100px;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .month {
+        font-size: 14px;
+        color: #475569;
+    }
+
+    .progress {
+        height: 9px;
+        background: #eef2f7;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        width: 70%;
+        background: #6366f1;
+        border-radius: 20px;
+    }
+
+    .revenue-value {
+        text-align: right;
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 14px;
+    }
+
+    .sales-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .sale-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #edf1f6;
+    }
+
+        .sale-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+    .book-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .book-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6366f1;
+    }
+
+    .book-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .copies {
+        background: #eef2ff;
+        color: #4f46e5;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .quick-action {
+        text-decoration: none;
+        background: white;
+        border: 1px solid #e8edf5;
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+        transition: 0.2s;
+    }
+
+        .quick-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        .quick-action i {
+            font-size: 22px;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .quick-action span {
+            display: block;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+    @@media(max-width: 1000px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .quick-actions {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media(max-width: 600px) {
+        .admin-page {
+            padding: 15px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .quick-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+    }
+
+    /* =========================================================
+       ADMIN DASHBOARD CHARTS
+       ========================================================= */
+
+    .chart-panel {
+        background: white;
+        border-radius: 18px;
+        border: 1px solid #e8edf5;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+        padding: 24px;
+        min-height: 390px;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .chart-header h3 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .chart-header span {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+    .chart-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 18px;
+    }
+
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .top-books-panel {
+        grid-column: 1 / -1;
+    }
+
+    .empty-chart {
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+        text-align: center;
+    }
+
+        .empty-chart i {
+            font-size: 42px;
+            margin-bottom: 12px;
+            color: #cbd5e1;
+        }
+
+        .empty-chart strong {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .empty-chart span {
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+    @@media(max-width: 1000px) {
+
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .top-books-panel {
+            grid-column: auto;
+        }
+    }
+
+    @@media(max-width: 600px) {
+
+        .chart-panel {
+            padding: 18px;
+        }
+
+        .chart-container {
+            height: 250px;
+        }
+
+        .chart-header {
+            align-items: flex-start;
+            gap: 10px;
+        }
+    }
+</style>
+
+<div class="admin-page">
+
+    <div class="dashboard-wrapper">
+
+        <!-- HEADER -->
+        <div class="dashboard-header">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome back. Here's what's happening in your bookstore.</p>
+            </div>
+
+            <div class="admin-badge">
+                <i class="bi bi-shield-check"></i>
+                Administrator
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <i class="bi bi-currency-rupee"></i>
+                    </div>
+                </div>
+
+                <div class="stat-title">
+                    Total Revenue
+                </div>
+
+                <div class="stat-value">
+                    ₹@Model.TotalRevenue.ToString("N2")
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <i class="bi bi-bag-check"></i>
+                    </div>
+                </div>
+
+                <div class="stat-title">
+                    Total Orders
+                </div>
+
+                <div class="stat-value">
+                    @Model.TotalOrders
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+                </div>
+
+                <div class="stat-title">
+                    Books Sold
+                </div>
+
+                <div class="stat-value">
+                    @Model.TotalBooksSold
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                </div>
+
+                <div class="stat-title">
+                    Sales Performance
+                </div>
+
+                <div class="stat-value">
+                    Growing
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- =========================================================
+     DASHBOARD CHARTS
+     ========================================================= -->
+
+        <div class="charts-grid">
+
+            <!-- MONTHLY REVENUE CHART -->
+            <div class="chart-panel">
+
+                <div class="chart-header">
+
+                    <div>
+                        <h3>Monthly Revenue</h3>
+                        <span>Revenue performance over time</span>
+                    </div>
+
+                    <div class="chart-icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+
+                </div>
+
+                @if (Model.MonthlyRevenue != null &&
+                     Model.MonthlyRevenue.Any())
+                {
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-chart">
+
+                        <i class="bi bi-bar-chart"></i>
+
+                        <strong>No revenue data available</strong>
+
+                        <span>
+                            Revenue will appear here after orders are placed.
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- GENRE PIE CHART -->
+            <div class="chart-panel">
+
+                <div class="chart-header">
+
+                    <div>
+                        <h3>Sales by Genre</h3>
+                        <span>Books sold by category</span>
+                    </div>
+
+                    <div class="chart-icon">
+                        <i class="bi bi-pie-chart"></i>
+                    </div>
+
+                </div>
+
+                @if (Model.GenreSales != null &&
+                     Model.GenreSales.Any())
+                {
+                    <div class="chart-container">
+                        <canvas id="genreChart"></canvas>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-chart">
+
+                        <i class="bi bi-pie-chart"></i>
+
+                        <strong>No genre data available</strong>
+
+                        <span>
+                            Genre sales will appear here after orders.
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- TOP BOOKS BAR CHART -->
+            <div class="chart-panel top-books-panel">
+
+                <div class="chart-header">
+
+                    <div>
+                        <h3>Top Selling Books</h3>
+                        <span>Best performing books in your store</span>
+                    </div>
+
+                    <div class="chart-icon">
+                        <i class="bi bi-bar-chart-fill"></i>
+                    </div>
+
+                </div>
+
+                @if (Model.BookSales != null &&
+                     Model.BookSales.Any())
+                {
+                    <div class="chart-container">
+                        <canvas id="booksChart"></canvas>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-chart">
+
+                        <i class="bi bi-book"></i>
+
+                        <strong>No sales data available</strong>
+
+                        <span>
+                            Top selling books will appear here after orders.
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <script>
+
+                    document.addEventListener("DOMContentLoaded", function() {
+
+                        // =====================================================
+                        // MONTHLY REVENUE CHART
+                        // =====================================================
+
+                        const revenueCanvas =
+                            document.getElementById("revenueChart");
+
+                        if (revenueCanvas) {
+
+                            const revenueLabels = @Html.Raw(JsonSerializer.Serialize(Model.MonthlyRevenue.Select(x => x.Month)));
+
+                            const revenueData =
+                        @Html.Raw(JsonSerializer.Serialize(
+                                Model.MonthlyRevenue.Select(x => x.Revenue)
+                                        ));
+
+                            new Chart(revenueCanvas, {
+
+                                type: "line",
+
+                                data: {
+                                    labels: revenueLabels,
+
+                                    datasets: [{
+                                        label: "Revenue",
+
+                                        data: revenueData,
+
+                                        borderColor: "#dca952",
+
+                                        backgroundColor: "rgba(220, 169, 82, 0.12)",
+
+                                        borderWidth: 3,
+
+                                        tension: 0.4,
+
+                                        fill: true,
+
+                                        pointRadius: 4,
+
+                                        pointHoverRadius: 7
+                                    }]
+                                },
+
+                                options: {
+
+                                    responsive: true,
+
+                                    maintainAspectRatio: false,
+
+                                    plugins: {
+
+                                        legend: {
+                                            display: false
+                                        },
+
+                                        tooltip: {
+                                            callbacks: {
+
+                                                label: function(context) {
+
+                                                    return " ₹" +
+                                                        Number(context.raw)
+                                                            .toLocaleString("en-IN");
+
+                                                }
+
+                                            }
+                                        }
+
+                                    },
+
+                                    scales: {
+
+                                        y: {
+                                            beginAtZero: true,
+
+                                            ticks: {
+                                                callback: function(value) {
+
+                                                    return "₹" +
+                                                        Number(value)
+                                                            .toLocaleString("en-IN");
+
+                                                }
+                                            },
+
+                                            grid: {
+                                                color: "#eef2f7"
+                                            }
+                                        },
+
+                                        x: {
+
+                                            grid: {
+                                                display: false
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            });
+
+                        }
+
+
+                        // =====================================================
+                        // GENRE PIE CHART
+                        // =====================================================
+
+                        const genreCanvas =
+                            document.getElementById("genreChart");
+
+                        if (genreCanvas) {
+
+                            const genreLabels = @Html.Raw(JsonSerializer.Serialize(Model.GenreSales.Select(x => x.GenreName)));
+
+                            const genreData =
+                        @Html.Raw(JsonSerializer.Serialize(
+                                Model.GenreSales.Select(x => x.CopiesSold)
+                                        ));
+
+                            new Chart(genreCanvas, {
+
+                                type: "doughnut",
+
+                                data: {
+
+                                    labels: genreLabels,
+
+                                    datasets: [{
+
+                                        data: genreData,
+
+                                        backgroundColor: [
+                                            "#EF4444",  // Red
+                                            "#3B82F6",  // Blue
+                                            "#22C55E",  // Green
+                                            "#8B5CF6",  // Purple
+                                            "#F59E0B"   // Yellow
+                                        ],
+
+                                        borderWidth: 3,
+
+                                        borderColor: "#ffffff",
+
+                                        hoverOffset: 8
+
+                                    }]
+
+                                },
+
+                                options: {
+
+                                    responsive: true,
+
+                                    maintainAspectRatio: false,
+
+                                    cutout: "62%",
+
+                                    plugins: {
+
+                                        legend: {
+
+                                            position: "bottom",
+
+                                            labels: {
+
+                                                padding: 15,
+
+                                                usePointStyle: true
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            });
+
+                        }
+
+
+                        // =====================================================
+                        // TOP BOOKS BAR CHART
+                        // =====================================================
+
+                        const booksCanvas =
+                            document.getElementById("booksChart");
+
+                        if (booksCanvas) {
+
+                            const bookLabels = @Html.Raw(JsonSerializer.Serialize(Model.BookSales.Select(x => x.BookName)));
+
+                            const bookData =
+                        @Html.Raw(JsonSerializer.Serialize(
+                                Model.BookSales.Select(x => x.CopiesSold)
+                                        ));
+
+                            new Chart(booksCanvas, {
+
+                                type: "bar",
+
+                                data: {
+
+                                    labels: bookLabels,
+
+                                    datasets: [{
+
+                                        label: "Copies Sold",
+
+                                        data: bookData,
+
+                                        backgroundColor: [
+                                            "#EF4444",
+                                            "#3B82F6",
+                                            "#22C55E",
+                                            "#8B5CF6",
+                                            "#F59E0B"
+                                        ],
+
+
+                                        borderRadius: 8,
+
+                                        borderSkipped: false
+
+                                    }]
+
+                                },
+
+                                options: {
+
+                                    responsive: true,
+
+                                    maintainAspectRatio: false,
+
+                                    plugins: {
+
+                                        legend: {
+                                            display: false
+                                        }
+
+                                    },
+
+                                    scales: {
+
+                                        y: {
+
+                                            beginAtZero: true,
+
+                                            ticks: {
+
+                                                stepSize: 1
+
+                                            },
+
+                                            grid: {
+
+                                                color: "#eef2f7"
+
+                                            }
+
+                                        },
+
+                                        x: {
+
+                                            grid: {
+                                                display: false
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            });
+
+                        }
+
+                    });
+
+        </script>
 
 
         <!-- QUICK ACTIONS -->

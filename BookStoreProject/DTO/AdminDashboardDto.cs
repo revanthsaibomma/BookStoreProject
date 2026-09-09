@@ -11,5 +11,7 @@
         public List<MonthlyRevenueDto> MonthlyRevenue { get; set; } = new();
 
         public List<BookSalesDto> BookSales { get; set; } = new();
+
+        public List<GenreSalesDto> GenreSales { get; set; } = new();
     }
 }
