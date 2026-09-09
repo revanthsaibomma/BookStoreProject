@@ -50,9 +50,9 @@ namespace BookStoreProject
 
             // Database
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("AzureCon")
                 ?? throw new InvalidOperationException(
-                    "Connection string 'DefaultConnection' not found."
+                    "Connection string 'AzureCon' not found."
                 );
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
