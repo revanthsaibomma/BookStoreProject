@@ -16,7 +16,7 @@ namespace BookStoreProject.Repository
         public async Task<IEnumerable<Genre>> GetAllAsync()
         {
             return await _context.Genres
-                .OrderBy(g => g.GenreName)
+                .OrderBy(g => g.Id)
                 .ToListAsync();
         }
 
