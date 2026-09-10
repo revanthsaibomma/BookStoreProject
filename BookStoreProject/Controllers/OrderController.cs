@@ -12,17 +12,20 @@ namespace BookStoreProject.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderRepo _orderRepo;
+        private readonly ICartRepo _cartRepo;
         private readonly IPdfService _pdfService;
         private readonly IMapper _mapper;
 
         public OrderController(
             IOrderRepo orderRepo,
             IPdfService pdfService,
-            IMapper mapper)
+            IMapper mapper,
+            ICartRepo cartRepo)
         {
             _orderRepo = orderRepo;
             _pdfService = pdfService;
             _mapper = mapper;
+            _cartRepo = cartRepo;
         }
 
 
@@ -41,9 +44,43 @@ namespace BookStoreProject.Controllers
         // GET: CHECKOUT PAGE
         // ==========================================
 
+        //[HttpGet]
+        //public IActionResult Checkout()
+        //{
+        //    return View(new CheckoutDto());
+        //}
+
         [HttpGet]
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
+            string claimId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!int.TryParse(claimId, out int userId))
+            {
+                return LocalRedirect("/Identity/Account/Login");
+            }
+
+            var cart = await _cartRepo.GetUserCart(userId);
+
+            if (cart == null || !cart.Any())
+            {
+                TempData["ErrorMessage"] = "Your cart is empty.";
+                return RedirectToAction("Index", "Cart");
+            }
+
+            // Check current stock
+            var stockProblem = cart
+                .Where(x => x.Quantity > x.Stock)
+                .ToList();
+
+            if (stockProblem.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "You cannot checkout because one or more books do not have enough stock.";
+
+                return RedirectToAction("Index", "Cart");
+            }
+
             return View(new CheckoutDto());
         }
 
