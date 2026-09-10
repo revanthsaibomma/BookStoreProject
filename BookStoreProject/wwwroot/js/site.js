@@ -1,33 +1,171 @@
 ﻿/* =========================================================
-   BOOKNEST - BOOK FILTER
+   BOOKNEST - BOOK SEARCH & GENRE FILTER
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const genreButtons =
-        document.querySelectorAll(".genre-btn");
+    // Search elements
+    const searchInput = document.getElementById("bookSearch");
+    const searchButton = document.getElementById("searchButton");
 
-    const books =
-        document.querySelectorAll(".book-item");
+    // Genre buttons
+    const genreButtons = document.querySelectorAll(".genre-btn");
 
-    const emptyMessage =
-        document.getElementById("filterEmpty");
+    // Book items
+    const books = document.querySelectorAll(".book-item");
+
+    // Empty messages
+    const filterEmpty = document.getElementById("filterEmpty");
+    const noBooksMessage = document.getElementById("noBooksMessage");
+
+    // Currently selected genre
+    let selectedGenre = "all";
 
 
-    if (genreButtons.length === 0 || books.length === 0) {
+    /* =====================================================
+       STOP IF THIS IS NOT THE HOME PAGE
+       ===================================================== */
+
+    if (books.length === 0) {
         return;
     }
 
+
+    /* =====================================================
+       MAIN FILTER FUNCTION
+       ===================================================== */
+
+    function filterBooks() {
+
+        // Get search text
+        const searchText = searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : "";
+
+
+        let visibleBooks = 0;
+
+
+        books.forEach(function (book) {
+
+            /*
+             * Your HTML structure is:
+             *
+             * .book-item
+             *      └── .book-card
+             *             ├── data-book-name
+             *             ├── data-author
+             *             └── data-genre
+             */
+
+            const card = book.querySelector(".book-card");
+
+
+            // Get genre from book-item/card
+            const bookGenre =
+                (
+                    book.getAttribute("data-genre") ||
+                    card?.getAttribute("data-genre") ||
+                    ""
+                ).toLowerCase();
+
+
+            // Get book name
+            const bookName =
+                (
+                    card?.getAttribute("data-book-name") ||
+                    ""
+                ).toLowerCase();
+
+
+            // Get author
+            const author =
+                (
+                    card?.getAttribute("data-author") ||
+                    ""
+                ).toLowerCase();
+
+
+            /* =================================================
+               CHECK GENRE
+               ================================================= */
+
+            const genreMatches =
+                selectedGenre === "all" ||
+                bookGenre === selectedGenre.toLowerCase();
+
+
+            /* =================================================
+               CHECK SEARCH
+               ================================================= */
+
+            const searchMatches =
+                searchText === "" ||
+                bookName.includes(searchText) ||
+                author.includes(searchText) ||
+                bookGenre.includes(searchText);
+
+
+            /* =================================================
+               SHOW / HIDE BOOK
+               ================================================= */
+
+            if (genreMatches && searchMatches) {
+
+                book.style.display = "";
+
+                visibleBooks++;
+
+            }
+            else {
+
+                book.style.display = "none";
+
+            }
+
+        });
+
+
+        /* =====================================================
+           EMPTY SEARCH RESULT MESSAGE
+           ===================================================== */
+
+        if (noBooksMessage) {
+
+            noBooksMessage.style.display =
+                visibleBooks === 0 ? "block" : "none";
+
+        }
+
+
+        /* =====================================================
+           EMPTY GENRE RESULT MESSAGE
+           ===================================================== */
+
+        if (filterEmpty) {
+
+            filterEmpty.style.display =
+                visibleBooks === 0 ? "block" : "none";
+
+        }
+
+    }
+
+
+    /* =========================================================
+       GENRE BUTTONS
+       ========================================================= */
 
     genreButtons.forEach(function (button) {
 
         button.addEventListener("click", function () {
 
-            const selectedGenre =
-                this.getAttribute("data-genre");
+            // Get selected genre
+            selectedGenre =
+                this.getAttribute("data-genre") || "all";
 
 
-            /* Remove active from every button */
+            /* Remove active from all buttons */
 
             genreButtons.forEach(function (btn) {
 
@@ -36,130 +174,75 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
 
-            /* Activate clicked button */
+            /* Add active to clicked button */
 
             this.classList.add("active");
 
 
-            let visibleBooks = 0;
+            /* Apply genre + search filter */
 
-
-            /* Filter books */
-
-            books.forEach(function (book) {
-
-                const bookGenre =
-                    book.getAttribute("data-genre");
-
-
-                if (
-                    selectedGenre === "all" ||
-                    (
-                        bookGenre &&
-                        bookGenre.toLowerCase() ===
-                        selectedGenre.toLowerCase()
-                    )
-                ) {
-
-                    book.style.display = "";
-
-                    visibleBooks++;
-
-                }
-                else {
-
-                    book.style.display = "none";
-
-                }
-
-            });
-
-
-            /* Show empty message if necessary */
-
-            if (emptyMessage) {
-
-                if (visibleBooks === 0) {
-
-                    emptyMessage.style.display = "block";
-
-                }
-                else {
-
-                    emptyMessage.style.display = "none";
-
-                }
-
-            }
+            filterBooks();
 
         });
 
     });
 
-});
 
+    /* =========================================================
+       SEARCH WHILE TYPING
+       ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
+    if (searchInput) {
 
-    const searchInput = document.getElementById("bookSearch");
-    const searchButton = document.getElementById("searchButton");
-    const booksGrid = document.getElementById("booksGrid");
-    const noBooksMessage = document.getElementById("noBooksMessage");
+        searchInput.addEventListener("input", function () {
 
-    if (!searchInput || !booksGrid) {
-        return;
-    }
+            filterBooks();
 
-    const bookCards = booksGrid.querySelectorAll(".book-card");
-
-    function searchBooks() {
-
-        const searchText = searchInput.value.trim().toLowerCase();
-
-        let visibleBooks = 0;
-
-        bookCards.forEach(function (card) {
-
-            const bookName = (
-                card.getAttribute("data-book-name") || ""
-            ).toLowerCase();
-
-            const author = (
-                card.getAttribute("data-author") || ""
-            ).toLowerCase();
-
-            const genre = (
-                card.getAttribute("data-genre") || ""
-            ).toLowerCase();
-
-            const matches =
-                searchText === "" ||
-                bookName.includes(searchText) ||
-                author.includes(searchText) ||
-                genre.includes(searchText);
-
-            if (matches) {
-                card.style.display = "";
-                visibleBooks++;
-            } else {
-                card.style.display = "none";
-            }
         });
 
-        if (noBooksMessage) {
-            noBooksMessage.style.display =
-                visibleBooks === 0 ? "block" : "none";
-        }
     }
 
-    // Search while typing
-    searchInput.addEventListener("input", searchBooks);
 
-    // Search button
+    /* =========================================================
+       SEARCH BUTTON
+       ========================================================= */
+
     if (searchButton) {
+
         searchButton.addEventListener("click", function () {
-            searchBooks();
+
+            filterBooks();
+
         });
+
     }
+
+
+    /* =========================================================
+       PRESS ENTER TO SEARCH
+       ========================================================= */
+
+    if (searchInput) {
+
+        searchInput.addEventListener("keydown", function (event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                filterBooks();
+
+            }
+
+        });
+
+    }
+
+
+    /* =========================================================
+       INITIAL FILTER
+       ========================================================= */
+
+    filterBooks();
 
 });
