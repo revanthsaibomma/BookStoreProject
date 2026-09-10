@@ -19,6 +19,7 @@ namespace BookStoreProject.Repository
         {
             var item = await _context.CartDetails
                 .Include(c => c.Cart)
+                .Include(c => c.Book)
                 .FirstOrDefaultAsync(c =>
                     c.Cart.UserId == userId &&
                     c.BookId == bookId &&
@@ -26,8 +27,11 @@ namespace BookStoreProject.Repository
 
             if (item != null)
             {
-                item.Quantity++;
-                await _context.SaveChangesAsync();
+                if (item.Quantity < item.Book.Stock)
+                {
+                    item.Quantity++;
+                    await _context.SaveChangesAsync();
+                }
             }
         }
 
@@ -122,6 +126,7 @@ namespace BookStoreProject.Repository
                     BookName = c.Book.BookName,
                     Image = c.Book.Image,
                     Price = c.Book.Price,
+                    Stock = c.Book.Stock,
                     Quantity = c.Quantity
                 })
                 .ToListAsync();
