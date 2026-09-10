@@ -79,6 +79,10 @@ namespace BookStoreProject.Mapping
                 .ForMember(
                     dest => dest.Price,
                     opt => opt.MapFrom(src => src.Book.Price)
+                )
+                .ForMember(
+                dest => dest.Stock,
+                opt => opt.MapFrom(src => src.Book.Stock)
                 );
 
 

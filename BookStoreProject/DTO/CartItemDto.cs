@@ -14,6 +14,8 @@
 
         public int Quantity { get; set; }
 
+        public int Stock { get; set; }
+
         public double TotalPrice => Price * Quantity;
     }
 }

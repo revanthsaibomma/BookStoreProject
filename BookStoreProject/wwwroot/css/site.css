@@ -5170,3 +5170,35 @@ footer {
             max-width: 100%;
         }
 }
+
+/* =========================================================
+   CART STOCK VALIDATION
+   ========================================================= */
+
+.checkout-disabled {
+    width: 100%;
+    border: none;
+    cursor: not-allowed;
+    opacity: 0.55;
+    background: #555 !important;
+    color: #fff !important;
+}
+
+.stock-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(220, 70, 70, 0.10);
+    border: 1px solid rgba(220, 70, 70, 0.25);
+    color: #ff8585;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+    .stock-warning i {
+        margin-top: 2px;
+        flex-shrink: 0;
+    }

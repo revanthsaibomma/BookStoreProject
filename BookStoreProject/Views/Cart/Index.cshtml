@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Shopping Cart";
     var total = Model?.Sum(x => x.TotalPrice) ?? 0;
+    var hasStockProblem = Model.Any(x => x.Quantity > x.Stock);
 }
 
 <style>
@@ -594,12 +595,38 @@
 
                     </div>
 
-                    <a asp-controller="Order"
-                       asp-action="Checkout"
-                       class="checkout-btn">
-                        Proceed to Checkout
-                        <span>→</span>
-                    </a>
+                    @if (hasStockProblem)
+                    {
+                        <button type="button"
+                                class="checkout-btn checkout-disabled"
+                                disabled>
+
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Cannot Proceed to Checkout
+
+                        </button>
+
+                        <div class="stock-warning">
+                            <i class="bi bi-exclamation-circle"></i>
+
+                            <span>
+                                One or more books in your cart have insufficient stock.
+                                Please reduce the quantity before checkout.
+                            </span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="Order"
+                           asp-action="Checkout"
+                           class="checkout-btn">
+
+                            Proceed to Checkout
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+                    }
 
                     <a asp-controller="Home"
                        asp-action="Index"
